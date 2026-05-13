@@ -3,13 +3,18 @@
 import { cn } from "@/lib/utils"
 import { forwardRef } from "react"
 
-interface GlassToggleProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+interface GlassToggleProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
   label?: string
+  onCheckedChange?: (checked: boolean) => void
 }
 
 const GlassToggle = forwardRef<HTMLInputElement, GlassToggleProps>(
-  ({ className, label, id, ...props }, ref) => {
+  ({ className, label, id, onCheckedChange, ...props }, ref) => {
     const toggleId = id || label?.toLowerCase().replace(/\s+/g, "-")
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      onCheckedChange?.(e.target.checked)
+    }
 
     return (
       <label
@@ -22,6 +27,7 @@ const GlassToggle = forwardRef<HTMLInputElement, GlassToggleProps>(
             type="checkbox"
             id={toggleId}
             className="peer sr-only"
+            onChange={handleChange}
             {...props}
           />
           <div

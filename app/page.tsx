@@ -16,6 +16,9 @@ import { ConversionFunnel } from "@/components/widgets/conversion-funnel"
 import { TrafficSources } from "@/components/widgets/traffic-sources"
 import { QuickActions } from "@/components/widgets/quick-actions"
 import { PerformanceMetrics } from "@/components/widgets/performance-metrics"
+import { UsersPage } from "@/components/pages/users-page"
+import { SettingsPage } from "@/components/pages/settings-page"
+import { ProfilePage } from "@/components/pages/profile-page"
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("dashboard")
@@ -186,23 +189,11 @@ export default function DashboardPage() {
 
               {activeTab === "components" && <ComponentShowcase />}
 
-              {(activeTab === "users" || activeTab === "settings") && (
-                <div className="flex items-center justify-center h-64 sm:h-96">
-                  <div className="text-center px-4">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mx-auto mb-4">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/40">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="12" />
-                        <line x1="12" y1="16" x2="12.01" y2="16" />
-                      </svg>
-                    </div>
-                    <h3 className="text-base sm:text-lg font-semibold text-white mb-2">
-                      {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Page
-                    </h3>
-                    <p className="text-xs sm:text-sm text-white/50">This section is under development</p>
-                  </div>
-                </div>
-              )}
+              {activeTab === "users" && <UsersPage />}
+
+              {activeTab === "settings" && <SettingsPage />}
+
+              {activeTab === "profile" && <ProfilePage />}
             </main>
           </div>
 

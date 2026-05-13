@@ -4,876 +4,238 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Glassmorphism Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1856ff',
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    * {
+    * { box-sizing: border-box; }
+    body { 
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a12;
+      min-height: 100vh;
       margin: 0;
-      padding: 0;
-      box-sizing: border-box;
     }
-
-    :root {
-      --bg-dark: #0a0a12;
-      --glass-bg: rgba(255, 255, 255, 0.04);
-      --glass-bg-02: rgba(255, 255, 255, 0.02);
-      --glass-bg-03: rgba(255, 255, 255, 0.03);
-      --glass-bg-06: rgba(255, 255, 255, 0.06);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --glass-border-06: rgba(255, 255, 255, 0.06);
-      --glass-border-10: rgba(255, 255, 255, 0.1);
-      --glass-hover: rgba(255, 255, 255, 0.06);
-      --text-primary: #ffffff;
-      --text-70: rgba(255, 255, 255, 0.7);
-      --text-60: rgba(255, 255, 255, 0.6);
-      --text-50: rgba(255, 255, 255, 0.5);
-      --text-40: rgba(255, 255, 255, 0.4);
-      --text-30: rgba(255, 255, 255, 0.3);
-      --primary: #6366f1;
-      --primary-hover: #5558e3;
-      --primary-glow: rgba(99, 102, 241, 0.25);
-      --primary-bg: rgba(99, 102, 241, 0.08);
-      --primary-border: rgba(99, 102, 241, 0.2);
-      --success: #10b981;
-      --success-bg: rgba(16, 185, 129, 0.15);
-      --warning: #f59e0b;
-      --warning-bg: rgba(245, 158, 11, 0.15);
-      --danger: #ef4444;
-      --danger-bg: rgba(239, 68, 68, 0.15);
-      --offline: rgba(255, 255, 255, 0.3);
-    }
-
-    body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg-dark);
-      color: var(--text-primary);
-      min-height: 100vh;
-      line-height: 1.5;
-    }
-
-    /* Sidebar */
-    .sidebar {
+    /* Gradient Background */
+    .gradient-bg {
       position: fixed;
-      left: 0;
-      top: 0;
-      width: 260px;
-      height: 100vh;
-      background: var(--glass-bg);
-      border-right: 1px solid var(--glass-border);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: 1.5rem;
-      z-index: 100;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
     }
-
-    .main-content {
-      margin-left: 260px;
-      padding: 1.5rem;
-      min-height: 100vh;
+    .gradient-orb-1 {
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(24,86,255,0.4) 0%, rgba(24,86,255,0.1) 40%, transparent 70%);
+      filter: blur(80px);
+      opacity: 0.3;
+      animation: pulse 8s ease-in-out infinite;
     }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.5rem;
-      margin-bottom: 2rem;
+    .gradient-orb-2 {
+      position: absolute;
+      bottom: -20%;
+      left: -15%;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,0.4) 0%, rgba(124,58,237,0.1) 40%, transparent 70%);
+      filter: blur(80px);
+      opacity: 0.25;
+      animation: pulse 10s ease-in-out infinite;
     }
-
-    .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, var(--primary), #8b5cf6);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .gradient-orb-3 {
+      position: absolute;
+      top: 30%;
+      left: 40%;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 60%);
+      filter: blur(60px);
+      opacity: 0.2;
+      animation: pulse 12s ease-in-out infinite reverse;
     }
-
-    .logo-text {
-      font-size: 1.25rem;
-      font-weight: 600;
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.05); }
     }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.875rem 1rem;
-      border-radius: 12px;
-      color: var(--text-50);
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: 0.25rem;
-    }
-
-    .nav-item:hover {
-      background: var(--glass-hover);
-      color: var(--text-primary);
-    }
-
-    .nav-item.active {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 8px 32px var(--primary-glow);
-    }
-
-    .nav-item svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .nav-badge {
-      margin-left: auto;
-      padding: 0.125rem 0.5rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      background: var(--primary-bg);
-      color: var(--primary);
-    }
-
     /* Glass Card */
     .glass-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 1rem;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: 1.25rem;
+      padding: 1.5rem;
     }
-
-    .glass-card.no-padding {
-      padding: 0;
-      overflow: hidden;
+    .glass-card-heavy {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
     }
-
-    /* Page Header */
-    .page-header {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+    .glass-card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.15);
     }
-
-    .page-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
+    /* Glass Input */
+    .glass-input {
+      height: 2.75rem;
+      width: 100%;
+      border-radius: 0.75rem;
+      padding: 0 1rem;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      transition: all 0.2s;
+      outline: none;
     }
-
-    .page-title {
-      font-size: 1.5rem;
-      font-weight: 700;
+    .glass-input::placeholder { color: rgba(255,255,255,0.4); }
+    .glass-input:focus {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(24,86,255,0.4);
+      box-shadow: 0 0 0 2px rgba(24,86,255,0.5);
     }
-
-    .page-description {
-      color: var(--text-50);
-      font-size: 0.875rem;
-      margin-top: 0.25rem;
-    }
-
-    /* Buttons */
-    .btn {
+    /* Glass Button */
+    .glass-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      padding: 0 1rem;
-      height: 2.5rem;
-      border-radius: 0.75rem;
-      font-size: 0.875rem;
       font-weight: 500;
-      cursor: pointer;
       transition: all 0.2s;
+      border-radius: 0.75rem;
+      cursor: pointer;
       border: none;
-      font-family: inherit;
     }
-
-    .btn-primary {
-      background: var(--primary);
+    .glass-btn-primary {
+      background: #1856ff;
+      color: white;
+      height: 2.5rem;
+      padding: 0 1.25rem;
+      font-size: 0.875rem;
+      box-shadow: 0 10px 15px -3px rgba(24,86,255,0.25);
+    }
+    .glass-btn-primary:hover { background: rgba(24,86,255,0.9); }
+    .glass-btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.1);
+      height: 2.5rem;
+      padding: 0 1.25rem;
+      font-size: 0.875rem;
+      backdrop-filter: blur(12px);
+    }
+    .glass-btn-secondary:hover { background: rgba(255,255,255,0.1); }
+    .glass-btn-ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.8);
+      padding: 0.625rem;
+    }
+    .glass-btn-ghost:hover { 
+      background: rgba(255,255,255,0.08);
       color: white;
     }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-      box-shadow: 0 8px 32px var(--primary-glow);
-    }
-
-    .btn-secondary {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border-10);
-      color: var(--text-primary);
-    }
-
-    .btn-secondary:hover {
-      background: var(--glass-hover);
-    }
-
-    .btn-sm {
+    .glass-btn-sm {
       height: 2rem;
       padding: 0 0.75rem;
-      font-size: 0.8125rem;
+      font-size: 0.875rem;
+      border-radius: 0.5rem;
     }
-
-    .btn:disabled {
+    .glass-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
-
-    /* Search */
-    .search-row {
-      display: flex;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .search-wrapper {
-      position: relative;
-      flex: 1;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-40);
-    }
-
-    .search-input {
-      width: 100%;
-      height: 2.75rem;
-      padding: 0 1rem 0 2.5rem;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border-10);
-      border-radius: 0.75rem;
-      color: var(--text-primary);
-      font-size: 0.875rem;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-    }
-
-    .search-input::placeholder {
-      color: var(--text-40);
-    }
-
-    /* Filter Pills */
-    .filters-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .filter-group {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .filter-label {
-      font-size: 0.75rem;
-      color: var(--text-50);
-    }
-
-    .filter-pills {
-      display: flex;
-      gap: 0.25rem;
-      padding: 0.25rem;
-      background: var(--glass-bg-03);
-      border: 1px solid var(--glass-bg-06);
-      border-radius: 0.75rem;
-    }
-
-    .filter-pill {
-      padding: 0.375rem 0.75rem;
-      font-size: 0.75rem;
-      font-weight: 500;
-      border-radius: 0.5rem;
-      color: var(--text-60);
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
-      background: transparent;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      gap: 0.375rem;
-    }
-
-    .filter-pill:hover {
-      color: var(--text-primary);
-      background: var(--glass-bg-06);
-    }
-
-    .filter-pill.active {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 4px 16px var(--primary-glow);
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-    }
-
-    .status-dot.online { background: var(--success); }
-    .status-dot.away { background: var(--warning); }
-    .status-dot.busy { background: var(--danger); }
-    .status-dot.offline { background: var(--offline); }
-
-    .filter-select {
-      height: 2.25rem;
-      padding: 0 0.75rem;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border-10);
-      border-radius: 0.5rem;
-      color: var(--text-primary);
-      font-size: 0.875rem;
-      font-family: inherit;
-      cursor: pointer;
-    }
-
-    .filter-select:focus {
-      outline: none;
-      border-color: rgba(99, 102, 241, 0.4);
-    }
-
-    .filter-select option {
-      background: var(--bg-dark);
-    }
-
-    /* Results Info */
-    .results-info {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.875rem;
-      color: var(--text-50);
-      margin-bottom: 1rem;
-    }
-
-    .results-info strong {
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .selected-count {
-      color: var(--primary);
-    }
-
-    /* Table */
-    .table-container {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead tr {
-      border-bottom: 1px solid var(--glass-border-06);
-    }
-
-    th {
-      padding: 1rem;
-      text-align: left;
-      font-size: 0.75rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-50);
-    }
-
-    tbody tr {
-      border-bottom: 1px solid var(--glass-bg);
-      transition: background 0.2s;
-      cursor: pointer;
-    }
-
-    tbody tr:hover {
-      background: var(--glass-bg-02);
-    }
-
-    tbody tr.selected {
-      background: rgba(99, 102, 241, 0.05);
-    }
-
-    td {
-      padding: 1rem;
-      font-size: 0.875rem;
-    }
-
-    .checkbox {
-      width: 1rem;
-      height: 1rem;
-      border-radius: 0.25rem;
-      background: var(--glass-bg);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      cursor: pointer;
-      accent-color: var(--primary);
-    }
-
-    .user-cell {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .avatar {
-      position: relative;
-      width: 40px;
-      height: 40px;
-      border-radius: 0.75rem;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
-      border: 1px solid var(--glass-border-10);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 0.875rem;
-      color: var(--text-70);
-    }
-
-    .avatar-status {
-      position: absolute;
-      bottom: -2px;
-      right: -2px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 2px solid var(--bg-dark);
-    }
-
-    .avatar-status.online { background: var(--success); }
-    .avatar-status.away { background: var(--warning); }
-    .avatar-status.busy { background: var(--danger); }
-    .avatar-status.offline { background: var(--offline); }
-
-    .user-info {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .user-name {
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .user-email {
-      font-size: 0.75rem;
-      color: var(--text-50);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* Badges */
-    .badge {
+    /* Glass Badge */
+    .glass-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.25rem;
-      padding: 0.25rem 0.625rem;
       border-radius: 9999px;
+      padding: 0.25rem 0.75rem;
       font-size: 0.75rem;
       font-weight: 500;
+      backdrop-filter: blur(8px);
+      border: 1px solid;
     }
-
-    .badge-primary {
-      background: var(--primary-bg);
-      color: var(--primary);
-      border: 1px solid var(--primary-border);
-    }
-
-    .badge-danger {
-      background: var(--danger-bg);
-      color: var(--danger);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-    }
-
-    .badge-default {
-      background: var(--glass-bg);
-      color: var(--text-60);
-      border: 1px solid var(--glass-border);
-    }
-
-    .badge-success {
-      background: var(--success-bg);
-      color: var(--success);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-    }
-
-    .text-muted {
-      color: var(--text-50);
-    }
-
-    .text-70 {
-      color: var(--text-70);
-    }
-
-    /* Action Buttons */
-    .action-btns {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.25rem;
-    }
-
-    .action-btn {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      color: var(--text-50);
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
-      background: transparent;
-    }
-
-    .action-btn:hover {
-      color: var(--text-primary);
-      background: var(--glass-bg-06);
-    }
-
-    .action-btn.danger:hover {
-      color: var(--danger);
-      background: rgba(239, 68, 68, 0.1);
-    }
-
-    /* Pagination */
-    .pagination {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem;
-      border-top: 1px solid var(--glass-border-06);
-    }
-
-    .pagination-info {
-      font-size: 0.875rem;
-      color: var(--text-50);
-    }
-
-    .pagination-btns {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    /* Section visibility */
-    .section {
-      display: none;
-    }
-
-    .section.active {
-      display: block;
-    }
-
-    /* Settings Page */
-    .settings-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-
-    @media (min-width: 1200px) {
-      .settings-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .settings-grid .full-width {
-        grid-column: span 2;
-      }
-    }
-
-    .section-title {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-    }
-
-    /* Image Upload Grid */
-    .upload-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 768px) {
-      .upload-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .upload-item label {
-      display: block;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-70);
-      margin-bottom: 0.75rem;
-    }
-
-    .upload-area {
+    .glass-badge-default { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.1); }
+    .glass-badge-primary { background: rgba(24,86,255,0.2); color: #1856ff; border-color: rgba(24,86,255,0.3); }
+    .glass-badge-success { background: rgba(16,185,129,0.2); color: #34d399; border-color: rgba(16,185,129,0.3); }
+    .glass-badge-warning { background: rgba(245,158,11,0.2); color: #fbbf24; border-color: rgba(245,158,11,0.3); }
+    .glass-badge-danger { background: rgba(239,68,68,0.2); color: #f87171; border-color: rgba(239,68,68,0.3); }
+    /* Glass Avatar */
+    .glass-avatar {
       position: relative;
-      aspect-ratio: 1;
-      border-radius: 1rem;
+      display: inline-block;
+    }
+    .glass-avatar-inner {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
       overflow: hidden;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: var(--glass-bg-03);
-      border: 2px dashed var(--glass-border-10);
-    }
-
-    .upload-area:hover {
-      border-color: rgba(99, 102, 241, 0.5);
-    }
-
-    .upload-area.has-image {
-      border-style: solid;
-    }
-
-    .upload-placeholder {
-      position: absolute;
-      inset: 0;
+      background: linear-gradient(135deg, rgba(24,86,255,0.3), rgba(124,58,237,0.3));
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      color: var(--text-40);
-      transition: color 0.2s;
-    }
-
-    .upload-area:hover .upload-placeholder {
-      color: var(--primary);
-    }
-
-    .upload-placeholder-text {
-      font-size: 0.75rem;
       font-weight: 500;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.875rem;
     }
-
-    .upload-placeholder-sub {
-      font-size: 0.625rem;
-    }
-
-    .upload-preview {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: none;
-    }
-
-    .upload-preview.visible {
-      display: block;
-    }
-
-    .upload-overlay {
+    .glass-avatar-md .glass-avatar-inner { width: 2.5rem; height: 2.5rem; font-size: 0.875rem; }
+    .glass-avatar-sm .glass-avatar-inner { width: 2rem; height: 2rem; font-size: 0.75rem; }
+    .glass-avatar-status {
       position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
+      bottom: 0;
+      right: 0;
+      width: 0.625rem;
+      height: 0.625rem;
+      border-radius: 50%;
+      border: 2px solid #0a0a12;
     }
-
-    .upload-area:hover .upload-overlay.visible {
-      display: flex;
-    }
-
-    .upload-overlay-btn {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .upload-overlay-btn.edit {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-    }
-
-    .upload-overlay-btn.edit:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .upload-overlay-btn.delete {
-      background: rgba(239, 68, 68, 0.2);
-      color: #f87171;
-    }
-
-    .upload-overlay-btn.delete:hover {
-      background: rgba(239, 68, 68, 0.3);
-    }
-
-    /* Form */
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.875rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      color: var(--text-70);
-    }
-
-    .form-input {
-      width: 100%;
-      height: 2.75rem;
-      padding: 0 1rem;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border-10);
-      border-radius: 0.75rem;
-      color: var(--text-primary);
-      font-size: 0.875rem;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-    }
-
-    .form-input::placeholder {
-      color: var(--text-40);
-    }
-
-    .form-select {
-      width: 100%;
-      height: 2.75rem;
-      padding: 0 1rem;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border-10);
-      border-radius: 0.75rem;
-      color: var(--text-primary);
-      font-size: 0.875rem;
-      font-family: inherit;
-      cursor: pointer;
-    }
-
-    .form-select:focus {
-      outline: none;
-      border-color: rgba(99, 102, 241, 0.4);
-    }
-
-    .form-select option {
-      background: var(--bg-dark);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.25rem;
-    }
-
-    @media (max-width: 640px) {
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Toggle */
-    .toggle-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem;
-      border-radius: 0.75rem;
-      background: var(--glass-bg-02);
-      border: 1px solid var(--glass-bg);
-      margin-bottom: 0.75rem;
-    }
-
-    .toggle-info h4 {
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-
-    .toggle-info p {
-      font-size: 0.75rem;
-      color: var(--text-50);
-    }
-
-    .toggle {
+    .status-online { background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,0.5); }
+    .status-offline { background: rgba(255,255,255,0.3); }
+    .status-away { background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.5); }
+    .status-busy { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.5); }
+    /* Glass Toggle */
+    .glass-toggle {
       position: relative;
-      width: 44px;
-      height: 24px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border-10);
+      width: 2.75rem;
+      height: 1.5rem;
+      background: rgba(255,255,255,0.1);
       border-radius: 9999px;
       cursor: pointer;
       transition: all 0.2s;
+      border: 1px solid rgba(255,255,255,0.1);
     }
-
-    .toggle.active {
-      background: var(--primary);
-      border-color: var(--primary);
+    .glass-toggle.active {
+      background: #1856ff;
+      border-color: rgba(24,86,255,0.5);
     }
-
-    .toggle-knob {
+    .glass-toggle-knob {
       position: absolute;
       top: 2px;
       left: 2px;
-      width: 18px;
-      height: 18px;
+      width: 1.125rem;
+      height: 1.125rem;
       background: white;
       border-radius: 50%;
-      transition: transform 0.2s;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-
-    .toggle.active .toggle-knob {
-      transform: translateX(20px);
+    .glass-toggle.active .glass-toggle-knob {
+      left: calc(100% - 1.125rem - 2px);
     }
-
-    /* Form Actions */
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.75rem;
-      margin-top: 1.5rem;
-    }
-
-    /* Profile Page */
-    .profile-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.375rem;
-    }
-
-    .pulse-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #34d399;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
     /* Tabs */
-    .tabs-nav {
-      display: flex;
-      border-bottom: 1px solid var(--glass-border-06);
-      overflow-x: auto;
-    }
-
     .tab-btn {
       display: flex;
       align-items: center;
@@ -881,24 +243,17 @@
       padding: 1rem 1.5rem;
       font-size: 0.875rem;
       font-weight: 500;
-      color: var(--text-50);
-      cursor: pointer;
+      color: rgba(255,255,255,0.5);
       transition: all 0.2s;
-      border: none;
-      background: transparent;
-      font-family: inherit;
       position: relative;
       white-space: nowrap;
+      background: none;
+      border: none;
+      cursor: pointer;
     }
-
-    .tab-btn:hover {
-      color: var(--text-70);
-    }
-
-    .tab-btn.active {
-      color: var(--primary);
-    }
-
+    .tab-btn:hover { color: rgba(255,255,255,0.8); }
+    .tab-btn.active { color: #1856ff; }
+    .tab-btn.active svg { color: #1856ff; }
     .tab-btn.active::after {
       content: '';
       position: absolute;
@@ -906,1144 +261,759 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: var(--primary);
+      background: #1856ff;
     }
-
-    .tab-btn svg {
-      transition: color 0.2s;
-    }
-
-    .tab-btn.active svg {
-      color: var(--primary);
-    }
-
-    .tab-content {
-      padding: 1.25rem;
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    /* Profile Photo Section */
-    .profile-photo-section {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.5rem;
-      padding: 1.25rem;
-      border-radius: 1rem;
-      background: var(--glass-bg-02);
-      border: 1px solid var(--glass-bg);
-      margin-bottom: 1.5rem;
-    }
-
-    @media (max-width: 640px) {
-      .profile-photo-section {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-    }
-
-    .profile-avatar-wrapper {
-      position: relative;
-    }
-
-    .profile-avatar {
-      width: 96px;
-      height: 96px;
-      border-radius: 1rem;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
-      border: 2px solid var(--glass-border-10);
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    /* Sidebar */
+    .sidebar-btn {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 1.875rem;
-      font-weight: 700;
-      color: var(--text-60);
-      overflow: hidden;
-    }
-
-    .profile-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: none;
-    }
-
-    .profile-avatar img.visible {
-      display: block;
-    }
-
-    .profile-avatar-edit {
-      position: absolute;
-      bottom: -8px;
-      right: -8px;
-      width: 32px;
-      height: 32px;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
       border-radius: 0.75rem;
-      background: var(--primary);
+      transition: all 0.2s;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+    }
+    .sidebar-btn:hover { 
+      color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.04);
+    }
+    .sidebar-btn.active {
+      background: rgba(24,86,255,0.15);
+      color: #1856ff;
+      border: 1px solid rgba(24,86,255,0.2);
+    }
+    .sidebar-btn.active svg { color: #1856ff; }
+    /* Filter Pill */
+    .filter-pill {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,0.6);
+    }
+    .filter-pill:hover {
       color: white;
+      background: rgba(255,255,255,0.06);
+    }
+    .filter-pill.active {
+      background: #1856ff;
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(24,86,255,0.25);
+    }
+    /* Image Upload */
+    .image-upload {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 1rem;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: rgba(255,255,255,0.03);
+      border: 2px dashed rgba(255,255,255,0.1);
+    }
+    .image-upload:hover { border-color: rgba(24,86,255,0.5); }
+    .image-upload.has-image { border-style: solid; }
+    .image-upload-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 16px var(--primary-glow);
-      border: none;
+      gap: 0.5rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .image-upload:hover .image-upload-overlay { opacity: 1; }
+    /* Table */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th {
+      padding: 1rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .data-table td { padding: 1rem; }
+    .data-table tr { 
+      border-bottom: 1px solid rgba(255,255,255,0.04);
       transition: background 0.2s;
     }
-
-    .profile-avatar-edit:hover {
-      background: var(--primary-hover);
-    }
-
-    .profile-photo-info {
-      flex: 1;
-    }
-
-    .profile-photo-info h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .profile-photo-info p {
-      font-size: 0.875rem;
-      color: var(--text-50);
-      margin-bottom: 0.75rem;
-    }
-
-    .profile-photo-btns {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    /* Social Links */
-    .social-links-section {
-      padding: 1.25rem;
-      border-radius: 1rem;
-      background: var(--glass-bg-02);
-      border: 1px solid var(--glass-bg);
-    }
-
-    .social-links-section h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
-    .social-links-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
-
-    @media (max-width: 640px) {
-      .social-links-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .social-input-wrapper {
-      position: relative;
-    }
-
-    .social-input-wrapper svg {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-40);
-    }
-
-    .social-input {
-      width: 100%;
-      height: 2.75rem;
-      padding: 0 1rem 0 2.5rem;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border-10);
-      border-radius: 0.75rem;
-      color: var(--text-primary);
-      font-size: 0.875rem;
-      font-family: inherit;
-    }
-
-    .social-input:focus {
-      outline: none;
-      border-color: rgba(99, 102, 241, 0.4);
-    }
-
-    /* Password Section */
-    .password-requirements {
-      padding: 1.25rem;
-      border-radius: 1rem;
-      background: var(--primary-bg);
-      border: 1px solid var(--primary-border);
-      margin-bottom: 1.5rem;
-    }
-
-    .password-requirements-header {
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .password-requirements-header svg {
-      color: var(--primary);
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .password-requirements h3 {
-      font-size: 0.875rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-    }
-
-    .password-requirements ul {
-      list-style: none;
-      margin-top: 0.5rem;
-    }
-
-    .password-requirements li {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.75rem;
-      color: var(--text-60);
-      margin-bottom: 0.25rem;
-    }
-
-    .password-requirements li::before {
-      content: '';
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--primary);
-    }
-
-    /* Password Strength */
-    .password-strength {
-      padding: 1rem;
-      border-radius: 0.75rem;
-      background: var(--glass-bg-02);
-      border: 1px solid var(--glass-bg);
-      margin-top: 1.5rem;
-      display: none;
-    }
-
-    .password-strength.visible {
-      display: block;
-    }
-
-    .password-strength-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-    }
-
-    .password-strength-header span {
-      font-size: 0.875rem;
-      color: var(--text-70);
-    }
-
-    .strength-bar {
-      height: 8px;
-      border-radius: 9999px;
-      background: var(--glass-bg-06);
-      overflow: hidden;
-    }
-
-    .strength-bar-fill {
-      height: 100%;
-      border-radius: 9999px;
-      transition: all 0.3s;
-    }
-
-    .strength-bar-fill.weak {
-      width: 33%;
-      background: var(--danger);
-    }
-
-    .strength-bar-fill.medium {
-      width: 66%;
-      background: var(--warning);
-    }
-
-    .strength-bar-fill.strong {
-      width: 100%;
-      background: var(--success);
-    }
-
-    /* Last Changed */
-    .last-changed {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1rem;
-      border-radius: 0.75rem;
-      background: var(--glass-bg-02);
-      border: 1px solid var(--glass-bg);
-      margin-top: 1.5rem;
-    }
-
-    .last-changed-icon {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      background: var(--glass-bg);
-    }
-
-    .last-changed-icon svg {
-      color: var(--text-50);
-    }
-
-    .last-changed-info p {
-      font-size: 0.875rem;
-    }
-
-    .last-changed-info span {
-      font-size: 0.75rem;
-      color: var(--text-50);
-    }
-
-    /* Address Section */
-    .map-preview {
-      position: relative;
-      height: 160px;
-      border-radius: 1rem;
-      background: var(--glass-bg-02);
-      border: 1px solid var(--glass-border-06);
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .map-preview-content {
-      text-align: center;
-    }
-
-    .map-preview-content svg {
-      color: var(--text-30);
-      margin-bottom: 0.5rem;
-    }
-
-    .map-preview-content p {
-      font-size: 0.875rem;
-      color: var(--text-50);
-    }
-
-    .map-expand-btn {
-      position: absolute;
-      bottom: 0.75rem;
-      right: 0.75rem;
-    }
-
-    /* Saved Addresses */
-    .saved-addresses {
-      padding: 1.25rem;
-      border-radius: 1rem;
-      background: var(--glass-bg-02);
-      border: 1px solid var(--glass-bg);
-      margin-top: 1.5rem;
-    }
-
-    .saved-addresses h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
-    .address-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      padding: 0.75rem;
-      border-radius: 0.75rem;
-      background: var(--glass-bg-02);
-      border: 1px solid var(--glass-border-06);
+    .data-table thead tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .data-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+    .data-table tbody tr.selected { background: rgba(24,86,255,0.05); }
+    /* Custom Checkbox */
+    .custom-checkbox {
+      width: 1rem;
+      height: 1rem;
+      border-radius: 0.25rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.2);
       cursor: pointer;
-      transition: border-color 0.2s;
-      margin-bottom: 0.75rem;
-    }
-
-    .address-item:hover {
-      border-color: var(--glass-border-10);
-    }
-
-    .address-item.default {
-      border-color: rgba(99, 102, 241, 0.3);
-    }
-
-    .address-icon {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      background: var(--glass-bg);
-    }
-
-    .address-icon.primary {
-      background: rgba(99, 102, 241, 0.2);
-    }
-
-    .address-icon.primary svg {
-      color: var(--primary);
-    }
-
-    .address-icon svg {
-      color: var(--text-50);
-    }
-
-    .address-info {
-      flex: 1;
-    }
-
-    .address-info-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .address-info h4 {
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-
-    .address-info p {
-      font-size: 0.75rem;
-      color: var(--text-50);
-      margin-top: 0.125rem;
-    }
-
-    .add-address-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.75rem;
-      border-radius: 0.75rem;
-      border: 2px dashed var(--glass-border-10);
-      background: transparent;
-      color: var(--text-50);
-      font-size: 0.875rem;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 1rem;
-    }
-
-    .add-address-btn:hover {
-      border-color: rgba(99, 102, 241, 0.5);
-      color: var(--primary);
-    }
-
-    /* Card Footer */
-    .card-footer {
-      display: flex;
-      flex-direction: column-reverse;
-      gap: 1rem;
-      padding: 1.25rem;
-      border-top: 1px solid var(--glass-border-06);
-      background: var(--glass-bg-02);
-    }
-
-    @media (min-width: 640px) {
-      .card-footer {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-      }
-    }
-
-    .card-footer-info {
-      font-size: 0.75rem;
-      color: var(--text-40);
-    }
-
-    .card-footer-actions {
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    /* Bio textarea */
-    .form-textarea {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border-10);
-      border-radius: 0.75rem;
-      color: var(--text-primary);
-      font-size: 0.875rem;
-      font-family: inherit;
-      resize: none;
+      appearance: none;
       transition: all 0.2s;
     }
-
-    .form-textarea:focus {
-      outline: none;
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    .custom-checkbox:checked {
+      background: #1856ff;
+      border-color: #1856ff;
     }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .main-content {
-        margin-left: 0;
-      }
-    }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="logo">
-      <div class="logo-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-          <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-          <polyline points="2 17 12 22 22 17"/>
-          <polyline points="2 12 12 17 22 12"/>
-        </svg>
-      </div>
-      <span class="logo-text">GlassUI</span>
-    </div>
-
-    <nav>
-      <div class="nav-item active" data-section="users">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        <span>Users</span>
-        <span class="nav-badge">128</span>
-      </div>
-      <div class="nav-item" data-section="settings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-        </svg>
-        <span>Settings</span>
-      </div>
-      <div class="nav-item" data-section="profile">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
-        <span>Profile</span>
-      </div>
-    </nav>
-  </aside>
+  <!-- Gradient Background -->
+  <div class="gradient-bg">
+    <div class="gradient-orb-1"></div>
+    <div class="gradient-orb-2"></div>
+    <div class="gradient-orb-3"></div>
+  </div>
 
   <!-- Main Content -->
-  <main class="main-content">
-    <!-- Users Section -->
-    <section id="users" class="section active">
-      <div class="page-header">
-        <div class="page-header-row">
-          <div>
-            <h1 class="page-title">Users</h1>
-            <p class="page-description">Manage your team members and their permissions</p>
-          </div>
-          <button class="btn btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 5v14M5 12h14"/>
+  <div class="relative z-10 min-h-screen">
+    <div class="container mx-auto px-4 py-6 max-w-[1600px]">
+      
+      <!-- Header -->
+      <div class="glass-card glass-card-heavy flex items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/[0.06] transition-colors" onclick="toggleSidebar()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
-            Add User
           </button>
-        </div>
-      </div>
-
-      <div class="glass-card" style="margin-bottom: 1.5rem;">
-        <div class="search-row">
-          <div class="search-wrapper">
-            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.3-4.3"/>
-            </svg>
-            <input type="text" id="user-search" class="search-input" placeholder="Search by name, email, or department...">
-          </div>
-          <button class="btn btn-primary" onclick="filterUsers()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.3-4.3"/>
-            </svg>
-            Search
-          </button>
-        </div>
-
-        <div class="filters-row">
-          <div class="filter-group">
-            <span class="filter-label">Role:</span>
-            <div class="filter-pills" id="role-filters">
-              <button class="filter-pill active" data-role="all">All</button>
-              <button class="filter-pill" data-role="Admin">Admin</button>
-              <button class="filter-pill" data-role="Editor">Editor</button>
-              <button class="filter-pill" data-role="Viewer">Viewer</button>
+          <div class="hidden lg:flex items-center gap-3">
+            <div class="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-violet-500/20 border border-primary/20">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary">
+                <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-lg font-bold text-white">Analytics Dashboard</h1>
+              <p class="text-xs text-white/50">Real-time insights</p>
             </div>
           </div>
-
-          <div class="filter-group">
-            <span class="filter-label">Status:</span>
-            <div class="filter-pills" id="status-filters">
-              <button class="filter-pill active" data-status="all">All</button>
-              <button class="filter-pill" data-status="online"><span class="status-dot online"></span>online</button>
-              <button class="filter-pill" data-status="away"><span class="status-dot away"></span>away</button>
-              <button class="filter-pill" data-status="busy"><span class="status-dot busy"></span>busy</button>
-              <button class="filter-pill" data-status="offline"><span class="status-dot offline"></span>offline</button>
-            </div>
+          <h1 class="lg:hidden text-base font-semibold text-white">Analytics</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:block w-48 md:w-64">
+            <input type="text" placeholder="Search..." class="glass-input">
           </div>
-
-          <div class="filter-group">
-            <span class="filter-label">Dept:</span>
-            <select class="filter-select" id="dept-filter">
-              <option value="all">All Departments</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Design">Design</option>
-              <option value="Operations">Operations</option>
-              <option value="Sales">Sales</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="results-info">
-          <span>Showing <strong id="results-count">8</strong> of 8 users</span>
-          <span class="selected-count" id="selected-count"></span>
-        </div>
-      </div>
-
-      <div class="glass-card no-padding">
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 48px;"><input type="checkbox" class="checkbox" id="select-all"></th>
-                <th>User</th>
-                <th>Role</th>
-                <th>Department</th>
-                <th>Join Date</th>
-                <th>Last Active</th>
-                <th style="text-align: right;">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="users-table">
-              <!-- Users will be populated by JavaScript -->
-            </tbody>
-          </table>
-        </div>
-        <div class="pagination">
-          <span class="pagination-info">Page 1 of 1</span>
-          <div class="pagination-btns">
-            <button class="btn btn-secondary btn-sm" disabled>Previous</button>
-            <button class="btn btn-secondary btn-sm" disabled>Next</button>
+          <button class="glass-btn glass-btn-ghost sm:hidden">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/70">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+          </button>
+          <button class="glass-btn glass-btn-ghost relative">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/70">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+          </button>
+          <button class="glass-btn glass-btn-ghost hidden sm:flex">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/70">
+              <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+          <div class="hidden sm:block h-8 w-px bg-white/10"></div>
+          <div class="glass-avatar glass-avatar-sm">
+            <div class="glass-avatar-inner">JD</div>
+            <span class="glass-avatar-status status-online"></span>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Settings Section -->
-    <section id="settings" class="section">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Settings</h1>
-          <p class="page-description">Configure your workspace preferences and branding</p>
-        </div>
-      </div>
-
-      <div class="settings-grid">
-        <!-- Branding Card -->
-        <div class="glass-card full-width">
-          <h2 class="section-title">Branding</h2>
-          <div class="upload-grid">
-            <!-- Company Logo -->
-            <div class="upload-item">
-              <label>Company Logo</label>
-              <div class="upload-area" id="logo-upload" onclick="document.getElementById('logo-input').click()">
-                <input type="file" id="logo-input" accept="image/*" onchange="handleImageUpload(event, 'logo')" style="display:none;">
-                <div class="upload-placeholder" id="logo-placeholder">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
-                    <circle cx="9" cy="9" r="2"/>
-                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+      <div class="flex gap-6">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 z-50 lg:relative lg:z-0 lg:w-64 lg:h-auto shrink-0 transition-transform duration-300 -translate-x-full lg:translate-x-0">
+          <div class="h-full lg:h-auto bg-[#0c0c14]/95 lg:bg-white/[0.03] backdrop-blur-xl border-r lg:border border-white/[0.08] lg:rounded-2xl p-4 lg:p-3">
+            <div class="flex items-center justify-between mb-6 lg:hidden">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-violet-500/20 border border-primary/20">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary">
+                    <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
                   </svg>
-                  <span class="upload-placeholder-text">Upload Logo</span>
-                  <span class="upload-placeholder-sub">PNG, JPG up to 2MB</span>
                 </div>
-                <img class="upload-preview" id="logo-preview" src="" alt="Logo Preview">
-                <div class="upload-overlay" id="logo-overlay">
-                  <button class="upload-overlay-btn edit" onclick="event.stopPropagation(); document.getElementById('logo-input').click()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                    </svg>
-                  </button>
-                  <button class="upload-overlay-btn delete" onclick="event.stopPropagation(); removeImage('logo')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                    </svg>
-                  </button>
-                </div>
+                <span class="text-white font-semibold">Analytics</span>
               </div>
-            </div>
-
-            <!-- Favicon -->
-            <div class="upload-item">
-              <label>Favicon</label>
-              <div class="upload-area" id="favicon-upload" onclick="document.getElementById('favicon-input').click()">
-                <input type="file" id="favicon-input" accept="image/*,.ico" onchange="handleImageUpload(event, 'favicon')" style="display:none;">
-                <div class="upload-placeholder" id="favicon-placeholder">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="m8 12 2 2 4-4"/>
-                  </svg>
-                  <span class="upload-placeholder-text">Upload Favicon</span>
-                  <span class="upload-placeholder-sub">ICO, PNG 32x32</span>
-                </div>
-                <img class="upload-preview" id="favicon-preview" src="" alt="Favicon Preview">
-                <div class="upload-overlay" id="favicon-overlay">
-                  <button class="upload-overlay-btn edit" onclick="event.stopPropagation(); document.getElementById('favicon-input').click()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                    </svg>
-                  </button>
-                  <button class="upload-overlay-btn delete" onclick="event.stopPropagation(); removeImage('favicon')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Cover Image -->
-            <div class="upload-item">
-              <label>Cover Image</label>
-              <div class="upload-area" id="cover-upload" onclick="document.getElementById('cover-input').click()">
-                <input type="file" id="cover-input" accept="image/*" onchange="handleImageUpload(event, 'cover')" style="display:none;">
-                <div class="upload-placeholder" id="cover-placeholder">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-                    <path d="m18 2 4 4-8 8h-4v-4l8-8z"/>
-                  </svg>
-                  <span class="upload-placeholder-text">Upload Cover</span>
-                  <span class="upload-placeholder-sub">1200x630 recommended</span>
-                </div>
-                <img class="upload-preview" id="cover-preview" src="" alt="Cover Preview">
-                <div class="upload-overlay" id="cover-overlay">
-                  <button class="upload-overlay-btn edit" onclick="event.stopPropagation(); document.getElementById('cover-input').click()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                    </svg>
-                  </button>
-                  <button class="upload-overlay-btn delete" onclick="event.stopPropagation(); removeImage('cover')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- General Settings -->
-        <div class="glass-card">
-          <h2 class="section-title">General Settings</h2>
-          <div class="form-group">
-            <label class="form-label">Company Name</label>
-            <input type="text" class="form-input" value="Acme Analytics">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Website URL</label>
-            <input type="url" class="form-input" value="https://analytics.acme.com">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Support Email</label>
-            <input type="email" class="form-input" value="support@acme.com">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Timezone</label>
-            <select class="form-select">
-              <option value="America/New_York" selected>Eastern Time (ET)</option>
-              <option value="America/Chicago">Central Time (CT)</option>
-              <option value="America/Denver">Mountain Time (MT)</option>
-              <option value="America/Los_Angeles">Pacific Time (PT)</option>
-              <option value="Europe/London">London (GMT)</option>
-              <option value="Europe/Paris">Paris (CET)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Language</label>
-            <select class="form-select">
-              <option value="en" selected>English</option>
-              <option value="es">Spanish</option>
-              <option value="fr">French</option>
-              <option value="de">German</option>
-              <option value="ja">Japanese</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Notifications & Security -->
-        <div class="glass-card">
-          <h2 class="section-title">Notifications & Security</h2>
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <h4>Email Notifications</h4>
-              <p>Receive updates via email</p>
-            </div>
-            <div class="toggle active" onclick="this.classList.toggle('active')">
-              <div class="toggle-knob"></div>
-            </div>
-          </div>
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <h4>Push Notifications</h4>
-              <p>Browser push alerts</p>
-            </div>
-            <div class="toggle active" onclick="this.classList.toggle('active')">
-              <div class="toggle-knob"></div>
-            </div>
-          </div>
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <h4>Weekly Report</h4>
-              <p>Get summary every Monday</p>
-            </div>
-            <div class="toggle active" onclick="this.classList.toggle('active')">
-              <div class="toggle-knob"></div>
-            </div>
-          </div>
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <h4>Two-Factor Auth</h4>
-              <p>Extra login security</p>
-            </div>
-            <div class="toggle" onclick="this.classList.toggle('active')">
-              <div class="toggle-knob"></div>
-            </div>
-          </div>
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <h4>Public Profile</h4>
-              <p>Allow others to find you</p>
-            </div>
-            <div class="toggle active" onclick="this.classList.toggle('active')">
-              <div class="toggle-knob"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-actions" style="margin-top: 1.5rem;">
-        <button class="btn btn-secondary">Cancel</button>
-        <button class="btn btn-primary">Save Changes</button>
-      </div>
-    </section>
-
-    <!-- Profile Section -->
-    <section id="profile" class="section">
-      <div class="page-header">
-        <div class="page-header-row">
-          <div>
-            <h1 class="page-title">Profile</h1>
-            <p class="page-description">Manage your personal information and preferences</p>
-          </div>
-          <span class="badge badge-success profile-badge">
-            <span class="pulse-dot"></span>
-            Profile Complete
-          </span>
-        </div>
-      </div>
-
-      <div class="glass-card no-padding">
-        <div class="tabs-nav">
-          <button class="tab-btn active" data-tab="information">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-            Information
-          </button>
-          <button class="tab-btn" data-tab="password">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-            Password
-          </button>
-          <button class="tab-btn" data-tab="address">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-            Address
-          </button>
-        </div>
-
-        <!-- Information Tab -->
-        <div class="tab-content active" id="tab-information">
-          <div class="profile-photo-section">
-            <div class="profile-avatar-wrapper">
-              <div class="profile-avatar" id="profile-avatar">
-                JD
-                <img id="profile-image" src="" alt="Profile">
-              </div>
-              <button class="profile-avatar-edit" onclick="document.getElementById('profile-input').click()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+              <button onclick="toggleSidebar()" class="p-2 rounded-xl text-white/60 hover:text-white hover:bg-white/[0.06] transition-colors">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
               </button>
-              <input type="file" id="profile-input" accept="image/*" onchange="handleProfileImage(event)" style="display:none;">
             </div>
-            <div class="profile-photo-info">
-              <h3>Profile Photo</h3>
-              <p>Upload a photo to personalize your account. JPG, PNG or GIF, max 2MB.</p>
-              <div class="profile-photo-btns">
-                <button class="btn btn-secondary btn-sm" onclick="document.getElementById('profile-input').click()">Upload New</button>
-                <button class="btn btn-secondary btn-sm" id="remove-profile-btn" style="display:none;" onclick="removeProfileImage()">Remove</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">First Name</label>
-              <input type="text" class="form-input" value="John">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Last Name</label>
-              <input type="text" class="form-input" value="Doe">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Email Address</label>
-              <input type="email" class="form-input" value="john.doe@company.com">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Phone Number</label>
-              <input type="tel" class="form-input" value="+1 (555) 123-4567">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Bio</label>
-            <textarea class="form-textarea" rows="3">Senior Product Designer with 8+ years of experience in creating user-centered digital experiences.</textarea>
-          </div>
-
-          <div class="social-links-section">
-            <h3>Social Links</h3>
-            <div class="social-links-grid">
-              <div class="form-group">
-                <label class="form-label">Website</label>
-                <div class="social-input-wrapper">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                  </svg>
-                  <input type="url" class="social-input" value="https://johndoe.design">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Twitter</label>
-                <div class="social-input-wrapper">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                  </svg>
-                  <input type="text" class="social-input" value="@johndoe">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">LinkedIn</label>
-                <div class="social-input-wrapper">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/>
-                  </svg>
-                  <input type="text" class="social-input" value="johndoe">
+            <nav class="flex flex-col gap-1">
+              <button class="sidebar-btn" data-page="dashboard" onclick="switchPage('dashboard', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span>Dashboard</span>
+              </button>
+              <button class="sidebar-btn" data-page="analytics" onclick="switchPage('analytics', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+                </svg>
+                <span>Analytics</span>
+                <span class="ml-auto text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary">New</span>
+              </button>
+              <button class="sidebar-btn active" data-page="users" onclick="switchPage('users', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                <span>Users</span>
+                <span class="ml-auto text-xs px-2 py-0.5 rounded-full bg-white/10 text-white/70">128</span>
+              </button>
+              <button class="sidebar-btn" data-page="components" onclick="switchPage('components', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+                </svg>
+                <span>Components</span>
+              </button>
+              <button class="sidebar-btn" data-page="profile" onclick="switchPage('profile', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span>Profile</span>
+              </button>
+              <button class="sidebar-btn" data-page="settings" onclick="switchPage('settings', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+                <span>Settings</span>
+              </button>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-white/[0.06] lg:hidden">
+              <div class="flex items-center gap-3 px-2">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center text-white font-semibold text-sm">JD</div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-white truncate">John Doe</p>
+                  <p class="text-xs text-white/50 truncate">john@example.com</p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </aside>
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden opacity-0 pointer-events-none transition-opacity" onclick="toggleSidebar()"></div>
 
-        <!-- Password Tab -->
-        <div class="tab-content" id="tab-password">
-          <div class="password-requirements">
-            <div class="password-requirements-header">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 16v-4M12 8h.01"/>
-              </svg>
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0">
+          
+          <!-- USERS PAGE -->
+          <div id="page-users" class="page-content">
+            <div class="space-y-6">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl sm:text-2xl font-bold text-white">Users</h1>
+                  <p class="text-sm text-white/50 mt-1">Manage your team members and their permissions</p>
+                </div>
+                <button class="glass-btn glass-btn-primary gap-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                  Add User
+                </button>
+              </div>
+
+              <div class="glass-card">
+                <div class="flex flex-col gap-4">
+                  <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1">
+                      <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                      </svg>
+                      <input type="text" id="userSearch" placeholder="Search by name, email, or department..." class="glass-input pl-10" oninput="filterUsers()">
+                    </div>
+                    <button class="glass-btn glass-btn-primary gap-2 shrink-0" onclick="filterUsers()">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                      </svg>
+                      Search
+                    </button>
+                  </div>
+
+                  <div class="flex flex-wrap gap-3">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs text-white/50">Role:</span>
+                      <div class="flex gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]" id="roleFilters">
+                        <button class="filter-pill active" onclick="setRoleFilter(this, 'all')">All</button>
+                        <button class="filter-pill" onclick="setRoleFilter(this, 'Admin')">Admin</button>
+                        <button class="filter-pill" onclick="setRoleFilter(this, 'Editor')">Editor</button>
+                        <button class="filter-pill" onclick="setRoleFilter(this, 'Viewer')">Viewer</button>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs text-white/50">Status:</span>
+                      <div class="flex gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]" id="statusFilters">
+                        <button class="filter-pill active" onclick="setStatusFilter(this, 'all')">All</button>
+                        <button class="filter-pill flex items-center gap-1.5" onclick="setStatusFilter(this, 'online')"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>online</button>
+                        <button class="filter-pill flex items-center gap-1.5" onclick="setStatusFilter(this, 'away')"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>away</button>
+                        <button class="filter-pill flex items-center gap-1.5" onclick="setStatusFilter(this, 'busy')"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>busy</button>
+                        <button class="filter-pill flex items-center gap-1.5" onclick="setStatusFilter(this, 'offline')"><span class="w-1.5 h-1.5 rounded-full bg-white/30"></span>offline</button>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs text-white/50">Dept:</span>
+                      <select id="deptFilter" onchange="filterUsers()" class="h-9 px-3 rounded-lg bg-white/[0.04] border border-white/[0.1] text-sm text-white focus:outline-none cursor-pointer">
+                        <option value="all" class="bg-[#0a0a12]">All Departments</option>
+                        <option value="Engineering" class="bg-[#0a0a12]">Engineering</option>
+                        <option value="Marketing" class="bg-[#0a0a12]">Marketing</option>
+                        <option value="Design" class="bg-[#0a0a12]">Design</option>
+                        <option value="Operations" class="bg-[#0a0a12]">Operations</option>
+                        <option value="Sales" class="bg-[#0a0a12]">Sales</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-white/50">Showing <span id="userCount" class="text-white font-medium">8</span> of 8 users</span>
+                    <span id="selectedCount" class="text-primary hidden">0 selected</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="glass-card p-0 overflow-hidden">
+                <div class="overflow-x-auto">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="w-12"><input type="checkbox" class="custom-checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+                        <th>User</th>
+                        <th class="hidden md:table-cell">Role</th>
+                        <th class="hidden lg:table-cell">Department</th>
+                        <th class="hidden xl:table-cell">Join Date</th>
+                        <th class="hidden sm:table-cell">Last Active</th>
+                        <th class="text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="usersTableBody"></tbody>
+                  </table>
+                </div>
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-white/[0.06]">
+                  <span class="text-sm text-white/50">Page 1 of 1</span>
+                  <div class="flex items-center gap-2">
+                    <button class="glass-btn glass-btn-secondary glass-btn-sm" disabled>Previous</button>
+                    <button class="glass-btn glass-btn-secondary glass-btn-sm" disabled>Next</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SETTINGS PAGE -->
+          <div id="page-settings" class="page-content hidden">
+            <div class="space-y-6">
               <div>
-                <h3>Password Requirements</h3>
-                <ul>
-                  <li>Minimum 8 characters long</li>
-                  <li>At least one uppercase letter</li>
-                  <li>At least one number</li>
-                  <li>At least one special character</li>
-                </ul>
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Settings</h1>
+                <p class="text-sm text-white/50 mt-1">Configure your workspace preferences and branding</p>
               </div>
-            </div>
-          </div>
 
-          <div class="form-group">
-            <label class="form-label">Current Password</label>
-            <input type="password" class="form-input" placeholder="Enter your current password">
-          </div>
-          <div class="form-group">
-            <label class="form-label">New Password</label>
-            <input type="password" class="form-input" id="new-password" placeholder="Enter your new password" oninput="updatePasswordStrength()">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Confirm New Password</label>
-            <input type="password" class="form-input" placeholder="Confirm your new password">
-          </div>
-
-          <div class="password-strength" id="password-strength">
-            <div class="password-strength-header">
-              <span>Password Strength</span>
-              <span class="badge" id="strength-badge">Weak</span>
-            </div>
-            <div class="strength-bar">
-              <div class="strength-bar-fill weak" id="strength-bar-fill"></div>
-            </div>
-          </div>
-
-          <div class="last-changed">
-            <div class="last-changed-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-              </svg>
-            </div>
-            <div class="last-changed-info">
-              <p>Last password change</p>
-              <span>January 15, 2024 at 2:30 PM</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Address Tab -->
-        <div class="tab-content" id="tab-address">
-          <div class="map-preview">
-            <div class="map-preview-content">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                <circle cx="12" cy="10" r="3"/>
-              </svg>
-              <p>Map preview</p>
-            </div>
-            <button class="btn btn-secondary btn-sm map-expand-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-              </svg>
-              Expand
-            </button>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group" style="grid-column: span 2;">
-              <label class="form-label">Street Address</label>
-              <input type="text" class="form-input" value="123 Innovation Drive">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Apartment, Suite, etc.</label>
-              <input type="text" class="form-input" value="Suite 456">
-            </div>
-            <div class="form-group">
-              <label class="form-label">City</label>
-              <input type="text" class="form-input" value="San Francisco">
-            </div>
-            <div class="form-group">
-              <label class="form-label">State / Province</label>
-              <select class="form-select">
-                <option value="California" selected>California</option>
-                <option value="New York">New York</option>
-                <option value="Texas">Texas</option>
-                <option value="Florida">Florida</option>
-                <option value="Washington">Washington</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">ZIP / Postal Code</label>
-              <input type="text" class="form-input" value="94102">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Country</label>
-              <select class="form-select">
-                <option value="United States" selected>United States</option>
-                <option value="Canada">Canada</option>
-                <option value="United Kingdom">United Kingdom</option>
-                <option value="Germany">Germany</option>
-                <option value="France">France</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="saved-addresses">
-            <h3>Saved Addresses</h3>
-            <div class="address-item default">
-              <div class="address-icon primary">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                  <polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
-              </div>
-              <div class="address-info">
-                <div class="address-info-header">
-                  <h4>Home</h4>
-                  <span class="badge badge-primary">Default</span>
+              <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <div class="glass-card xl:col-span-2">
+                  <h2 class="text-lg font-semibold text-white mb-6">Branding</h2>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-3">
+                      <label class="text-sm font-medium text-white/80">Company Logo</label>
+                      <div class="image-upload" id="logoUpload" onclick="document.getElementById('logoInput').click()">
+                        <div id="logoPreview" class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/40 hover:text-primary transition-colors">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                          </svg>
+                          <span class="text-xs font-medium">Upload Logo</span>
+                          <span class="text-[10px]">PNG, JPG up to 2MB</span>
+                        </div>
+                        <input type="file" id="logoInput" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'logoPreview', 'logoUpload')">
+                      </div>
+                    </div>
+                    <div class="space-y-3">
+                      <label class="text-sm font-medium text-white/80">Favicon</label>
+                      <div class="image-upload" id="faviconUpload" onclick="document.getElementById('faviconInput').click()">
+                        <div id="faviconPreview" class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/40 hover:text-primary transition-colors">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/><path d="m8 12 2 2 4-4"/>
+                          </svg>
+                          <span class="text-xs font-medium">Upload Favicon</span>
+                          <span class="text-[10px]">ICO, PNG 32x32</span>
+                        </div>
+                        <input type="file" id="faviconInput" accept="image/*,.ico" class="hidden" onchange="handleImageUpload(this, 'faviconPreview', 'faviconUpload')">
+                      </div>
+                    </div>
+                    <div class="space-y-3">
+                      <label class="text-sm font-medium text-white/80">Cover Image</label>
+                      <div class="image-upload" id="coverUpload" onclick="document.getElementById('coverInput').click()">
+                        <div id="coverPreview" class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/40 hover:text-primary transition-colors">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/><path d="m18 2 4 4-8 8h-4v-4l8-8z"/>
+                          </svg>
+                          <span class="text-xs font-medium">Upload Cover</span>
+                          <span class="text-[10px]">1200x630 recommended</span>
+                        </div>
+                        <input type="file" id="coverInput" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'coverPreview', 'coverUpload')">
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p>123 Innovation Drive, Suite 456, San Francisco, CA 94102</p>
-              </div>
-              <button class="action-btn">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                </svg>
-              </button>
-            </div>
-            <div class="address-item">
-              <div class="address-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                  <circle cx="12" cy="10" r="3"/>
-                </svg>
-              </div>
-              <div class="address-info">
-                <h4>Work</h4>
-                <p>456 Market Street, Floor 12, San Francisco, CA 94103</p>
-              </div>
-              <button class="action-btn">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                </svg>
-              </button>
-            </div>
-            <button class="add-address-btn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 5v14M5 12h14"/>
-              </svg>
-              Add New Address
-            </button>
-          </div>
-        </div>
 
-        <div class="card-footer">
-          <p class="card-footer-info">Last updated: January 20, 2024 at 4:15 PM</p>
-          <div class="card-footer-actions">
-            <button class="btn btn-secondary">Discard Changes</button>
-            <button class="btn btn-primary">Save Changes</button>
+                <div class="glass-card">
+                  <h2 class="text-lg font-semibold text-white mb-6">General Settings</h2>
+                  <div class="space-y-5">
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-medium text-white/80">Company Name</label>
+                      <input type="text" value="Acme Analytics" class="glass-input">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-medium text-white/80">Website URL</label>
+                      <input type="url" value="https://analytics.acme.com" class="glass-input">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-medium text-white/80">Support Email</label>
+                      <input type="email" value="support@acme.com" class="glass-input">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-medium text-white/80">Timezone</label>
+                      <select class="glass-input cursor-pointer">
+                        <option value="America/New_York" class="bg-[#0a0a12]" selected>Eastern Time (ET)</option>
+                        <option value="America/Chicago" class="bg-[#0a0a12]">Central Time (CT)</option>
+                        <option value="America/Denver" class="bg-[#0a0a12]">Mountain Time (MT)</option>
+                        <option value="America/Los_Angeles" class="bg-[#0a0a12]">Pacific Time (PT)</option>
+                        <option value="Europe/London" class="bg-[#0a0a12]">London (GMT)</option>
+                        <option value="Europe/Paris" class="bg-[#0a0a12]">Paris (CET)</option>
+                      </select>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-medium text-white/80">Language</label>
+                      <select class="glass-input cursor-pointer">
+                        <option value="en" class="bg-[#0a0a12]" selected>English</option>
+                        <option value="es" class="bg-[#0a0a12]">Spanish</option>
+                        <option value="fr" class="bg-[#0a0a12]">French</option>
+                        <option value="de" class="bg-[#0a0a12]">German</option>
+                        <option value="ja" class="bg-[#0a0a12]">Japanese</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="glass-card">
+                  <h2 class="text-lg font-semibold text-white mb-6">Notifications & Security</h2>
+                  <div class="space-y-5">
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div>
+                        <p class="text-sm font-medium text-white">Email Notifications</p>
+                        <p class="text-xs text-white/50">Receive updates via email</p>
+                      </div>
+                      <div class="glass-toggle active" onclick="toggleSwitch(this)"><div class="glass-toggle-knob"></div></div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div>
+                        <p class="text-sm font-medium text-white">Push Notifications</p>
+                        <p class="text-xs text-white/50">Browser push alerts</p>
+                      </div>
+                      <div class="glass-toggle active" onclick="toggleSwitch(this)"><div class="glass-toggle-knob"></div></div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div>
+                        <p class="text-sm font-medium text-white">Weekly Report</p>
+                        <p class="text-xs text-white/50">Get summary every Monday</p>
+                      </div>
+                      <div class="glass-toggle active" onclick="toggleSwitch(this)"><div class="glass-toggle-knob"></div></div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div>
+                        <p class="text-sm font-medium text-white">Two-Factor Auth</p>
+                        <p class="text-xs text-white/50">Extra login security</p>
+                      </div>
+                      <div class="glass-toggle" onclick="toggleSwitch(this)"><div class="glass-toggle-knob"></div></div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div>
+                        <p class="text-sm font-medium text-white">Public Profile</p>
+                        <p class="text-xs text-white/50">Allow others to find you</p>
+                      </div>
+                      <div class="glass-toggle active" onclick="toggleSwitch(this)"><div class="glass-toggle-knob"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-3">
+                <button class="glass-btn glass-btn-secondary">Cancel</button>
+                <button class="glass-btn glass-btn-primary">Save Changes</button>
+              </div>
+            </div>
           </div>
-        </div>
+
+          <!-- PROFILE PAGE -->
+          <div id="page-profile" class="page-content hidden">
+            <div class="space-y-6">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl sm:text-2xl font-bold text-white">Profile</h1>
+                  <p class="text-sm text-white/50 mt-1">Manage your personal information and preferences</p>
+                </div>
+                <span class="glass-badge glass-badge-success self-start sm:self-auto">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+                  Profile Complete
+                </span>
+              </div>
+
+              <div class="glass-card p-0 overflow-hidden">
+                <div class="flex border-b border-white/[0.06] overflow-x-auto">
+                  <button class="tab-btn active" onclick="switchProfileTab(this, 'information')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/40">
+                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Information
+                  </button>
+                  <button class="tab-btn" onclick="switchProfileTab(this, 'password')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/40">
+                      <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    Password
+                  </button>
+                  <button class="tab-btn" onclick="switchProfileTab(this, 'address')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/40">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Address
+                  </button>
+                </div>
+
+                <div class="p-5 sm:p-6">
+                  <!-- Information Tab -->
+                  <div id="tab-information" class="tab-content active">
+                    <div class="space-y-6">
+                      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                        <div class="relative group">
+                          <div class="w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-primary/30 to-violet-500/30 border-2 border-white/[0.1]" id="profilePhotoContainer">
+                            <div id="profilePhotoPreview" class="w-full h-full flex items-center justify-center text-3xl font-bold text-white/60">JD</div>
+                          </div>
+                          <button onclick="document.getElementById('profilePhotoInput').click()" class="absolute -bottom-2 -right-2 p-2 rounded-xl bg-primary text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                          </button>
+                          <input type="file" id="profilePhotoInput" accept="image/*" class="hidden" onchange="handleProfilePhotoUpload(this)">
+                        </div>
+                        <div class="flex-1">
+                          <h3 class="text-lg font-semibold text-white">Profile Photo</h3>
+                          <p class="text-sm text-white/50 mt-1">Upload a photo to personalize your account. JPG, PNG or GIF, max 2MB.</p>
+                          <div class="flex gap-2 mt-3">
+                            <button class="glass-btn glass-btn-secondary glass-btn-sm" onclick="document.getElementById('profilePhotoInput').click()">Upload New</button>
+                            <button id="removePhotoBtn" class="glass-btn glass-btn-ghost glass-btn-sm hidden" onclick="removeProfilePhoto()">Remove</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">First Name</label><input type="text" value="John" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Last Name</label><input type="text" value="Doe" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Email Address</label><input type="email" value="john.doe@company.com" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Phone Number</label><input type="tel" value="+1 (555) 123-4567" class="glass-input"></div>
+                      </div>
+
+                      <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white/80">Bio</label>
+                        <textarea rows="3" class="w-full rounded-xl px-4 py-3 bg-white/[0.04] border border-white/[0.1] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none transition-all">Senior Product Designer with 8+ years of experience in creating user-centered digital experiences.</textarea>
+                      </div>
+
+                      <div class="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                        <h3 class="text-base font-semibold text-white mb-4">Social Links</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white/80">Website</label>
+                            <div class="relative">
+                              <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                              <input type="url" value="https://johndoe.design" class="glass-input pl-10">
+                            </div>
+                          </div>
+                          <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white/80">Twitter</label>
+                            <div class="relative">
+                              <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                              <input type="text" value="@johndoe" class="glass-input pl-10">
+                            </div>
+                          </div>
+                          <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white/80">LinkedIn</label>
+                            <div class="relative">
+                              <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
+                              <input type="text" value="johndoe" class="glass-input pl-10">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Password Tab -->
+                  <div id="tab-password" class="tab-content">
+                    <div class="space-y-6">
+                      <div class="p-5 rounded-2xl bg-primary/[0.08] border border-primary/20">
+                        <div class="flex gap-3">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                          <div>
+                            <h3 class="text-sm font-medium text-white">Password Requirements</h3>
+                            <ul class="mt-2 space-y-1 text-xs text-white/60">
+                              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-primary"></span>Minimum 8 characters long</li>
+                              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-primary"></span>At least one uppercase letter</li>
+                              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-primary"></span>At least one number</li>
+                              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-primary"></span>At least one special character</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="space-y-5">
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Current Password</label><input type="password" placeholder="Enter your current password" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">New Password</label><input type="password" id="newPassword" placeholder="Enter your new password" class="glass-input" oninput="updatePasswordStrength()"></div>
+                        <div class="flex flex-col gap-2">
+                          <label class="text-sm font-medium text-white/80">Confirm New Password</label>
+                          <input type="password" id="confirmPassword" placeholder="Confirm your new password" class="glass-input" oninput="checkPasswordMatch()">
+                          <p id="passwordMatchError" class="text-sm text-red-400 hidden">Passwords do not match</p>
+                        </div>
+                      </div>
+
+                      <div id="passwordStrength" class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.04] hidden">
+                        <div class="flex items-center justify-between mb-2">
+                          <span class="text-sm text-white/70">Password Strength</span>
+                          <span id="strengthBadge" class="glass-badge glass-badge-danger">Weak</span>
+                        </div>
+                        <div class="h-2 rounded-full bg-white/[0.06] overflow-hidden">
+                          <div id="strengthBar" class="h-full rounded-full bg-red-500 w-1/3 transition-all duration-300"></div>
+                        </div>
+                      </div>
+
+                      <div class="flex items-center gap-3 p-4 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                        <div class="p-2 rounded-lg bg-white/[0.04]">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div>
+                          <p class="text-sm text-white">Last password change</p>
+                          <p class="text-xs text-white/50">January 15, 2024 at 2:30 PM</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Address Tab -->
+                  <div id="tab-address" class="tab-content">
+                    <div class="space-y-6">
+                      <div class="relative h-40 rounded-2xl overflow-hidden bg-white/[0.02] border border-white/[0.06]">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                          <div class="text-center">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto text-white/30 mb-2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <p class="text-sm text-white/50">Map preview</p>
+                          </div>
+                        </div>
+                        <div class="absolute bottom-3 right-3">
+                          <button class="glass-btn glass-btn-secondary glass-btn-sm">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mr-1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                            Expand
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div class="sm:col-span-2 flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Street Address</label><input type="text" value="123 Innovation Drive" placeholder="123 Main Street" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Apartment, Suite, etc.</label><input type="text" value="Suite 456" placeholder="Apt 4B" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">City</label><input type="text" value="San Francisco" class="glass-input"></div>
+                        <div class="flex flex-col gap-2">
+                          <label class="text-sm font-medium text-white/80">State / Province</label>
+                          <select class="glass-input cursor-pointer">
+                            <option value="California" class="bg-[#0a0a12]" selected>California</option>
+                            <option value="New York" class="bg-[#0a0a12]">New York</option>
+                            <option value="Texas" class="bg-[#0a0a12]">Texas</option>
+                            <option value="Florida" class="bg-[#0a0a12]">Florida</option>
+                            <option value="Washington" class="bg-[#0a0a12]">Washington</option>
+                          </select>
+                        </div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">ZIP / Postal Code</label><input type="text" value="94102" class="glass-input"></div>
+                        <div class="flex flex-col gap-2">
+                          <label class="text-sm font-medium text-white/80">Country</label>
+                          <select class="glass-input cursor-pointer">
+                            <option value="United States" class="bg-[#0a0a12]" selected>United States</option>
+                            <option value="Canada" class="bg-[#0a0a12]">Canada</option>
+                            <option value="United Kingdom" class="bg-[#0a0a12]">United Kingdom</option>
+                            <option value="Germany" class="bg-[#0a0a12]">Germany</option>
+                            <option value="France" class="bg-[#0a0a12]">France</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                        <h3 class="text-base font-semibold text-white mb-4">Saved Addresses</h3>
+                        <div class="space-y-3">
+                          <div class="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-primary/30 cursor-pointer">
+                            <div class="p-2 rounded-lg bg-primary/20">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            </div>
+                            <div class="flex-1">
+                              <div class="flex items-center gap-2">
+                                <p class="text-sm font-medium text-white">Home</p>
+                                <span class="glass-badge glass-badge-primary">Default</span>
+                              </div>
+                              <p class="text-xs text-white/50 mt-0.5">123 Innovation Drive, Suite 456, San Francisco, CA 94102</p>
+                            </div>
+                            <button class="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/[0.06] transition-colors">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                            </button>
+                          </div>
+                          <div class="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] cursor-pointer hover:border-white/[0.1] transition-colors">
+                            <div class="p-2 rounded-lg bg-white/[0.04]">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                            <div class="flex-1">
+                              <p class="text-sm font-medium text-white">Work</p>
+                              <p class="text-xs text-white/50 mt-0.5">456 Market Street, Floor 12, San Francisco, CA 94103</p>
+                            </div>
+                            <button class="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/[0.06] transition-colors">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                            </button>
+                          </div>
+                        </div>
+                        <button class="mt-4 w-full flex items-center justify-center gap-2 p-3 rounded-xl border-2 border-dashed border-white/[0.1] text-white/50 hover:border-primary/50 hover:text-primary transition-colors">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                          Add New Address
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4 p-5 sm:p-6 border-t border-white/[0.06] bg-white/[0.01]">
+                  <p class="text-xs text-white/40">Last updated: January 20, 2024 at 4:15 PM</p>
+                  <div class="flex gap-3">
+                    <button class="glass-btn glass-btn-secondary">Discard Changes</button>
+                    <button class="glass-btn glass-btn-primary">Save Changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </main>
       </div>
-    </section>
-  </main>
+
+      <footer class="mt-12 text-center py-6 border-t border-white/[0.06]">
+        <p class="text-sm text-white/40">Built with Glassmorphism Design System</p>
+      </footer>
+    </div>
+  </div>
 
   <script>
-    // Users Data - Exact match from React component
     const usersData = [
       { id: "1", name: "Sarah Chen", email: "sarah@company.com", role: "Admin", status: "online", department: "Engineering", joinDate: "Jan 15, 2024", lastActive: "Just now" },
       { id: "2", name: "Marcus Johnson", email: "marcus@company.com", role: "Editor", status: "online", department: "Marketing", joinDate: "Feb 3, 2024", lastActive: "2 min ago" },
@@ -2054,259 +1024,160 @@
       { id: "7", name: "Olivia Brown", email: "olivia@company.com", role: "Editor", status: "away", department: "Design", joinDate: "Jul 20, 2024", lastActive: "30 min ago" },
       { id: "8", name: "Daniel Lee", email: "daniel@company.com", role: "Viewer", status: "online", department: "Engineering", joinDate: "Aug 5, 2024", lastActive: "Just now" },
     ];
+    let currentRoleFilter = 'all', currentStatusFilter = 'all', selectedUsers = [];
+    const roleColors = { Admin: 'danger', Editor: 'primary', Viewer: 'default' };
 
-    const roleColors = {
-      Admin: "badge-danger",
-      Editor: "badge-primary",
-      Viewer: "badge-default"
-    };
+    document.addEventListener('DOMContentLoaded', () => renderUsers(usersData));
 
-    let selectedUsers = [];
-    let currentRoleFilter = "all";
-    let currentStatusFilter = "all";
-    let currentDeptFilter = "all";
-
-    // Render Users Table
-    function renderUsers() {
-      const searchQuery = document.getElementById('user-search').value.toLowerCase();
-      
-      const filteredUsers = usersData.filter(user => {
-        const matchesSearch = 
-          user.name.toLowerCase().includes(searchQuery) ||
-          user.email.toLowerCase().includes(searchQuery) ||
-          user.department.toLowerCase().includes(searchQuery);
-        const matchesRole = currentRoleFilter === "all" || user.role === currentRoleFilter;
-        const matchesStatus = currentStatusFilter === "all" || user.status === currentStatusFilter;
-        const matchesDept = currentDeptFilter === "all" || user.department === currentDeptFilter;
-        return matchesSearch && matchesRole && matchesStatus && matchesDept;
-      });
-
-      const tbody = document.getElementById('users-table');
-      tbody.innerHTML = filteredUsers.map(user => {
-        const initials = user.name.split(" ").map(n => n[0]).join("");
-        const isSelected = selectedUsers.includes(user.id);
-        return `
-          <tr class="${isSelected ? 'selected' : ''}" onclick="toggleSelectUser('${user.id}')">
-            <td onclick="event.stopPropagation()">
-              <input type="checkbox" class="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelectUser('${user.id}')">
-            </td>
-            <td>
-              <div class="user-cell">
-                <div class="avatar">
-                  ${initials}
-                  <div class="avatar-status ${user.status}"></div>
-                </div>
-                <div class="user-info">
-                  <span class="user-name">${user.name}</span>
-                  <span class="user-email">${user.email}</span>
-                </div>
-              </div>
-            </td>
-            <td><span class="badge ${roleColors[user.role]}">${user.role}</span></td>
-            <td class="text-70">${user.department}</td>
-            <td class="text-muted">${user.joinDate}</td>
-            <td class="text-muted">${user.lastActive}</td>
-            <td>
-              <div class="action-btns">
-                <button class="action-btn" onclick="event.stopPropagation()">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                  </svg>
-                </button>
-                <button class="action-btn danger" onclick="event.stopPropagation()">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                  </svg>
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-
-      document.getElementById('results-count').textContent = filteredUsers.length;
-      updateSelectedCount();
-    }
-
-    function toggleSelectUser(id) {
-      if (selectedUsers.includes(id)) {
-        selectedUsers = selectedUsers.filter(uid => uid !== id);
-      } else {
-        selectedUsers.push(id);
-      }
-      renderUsers();
-    }
-
-    function updateSelectedCount() {
-      const countEl = document.getElementById('selected-count');
-      if (selectedUsers.length > 0) {
-        countEl.textContent = `${selectedUsers.length} selected`;
-      } else {
-        countEl.textContent = '';
-      }
+    function renderUsers(users) {
+      document.getElementById('usersTableBody').innerHTML = users.map(user => `
+        <tr class="${selectedUsers.includes(user.id) ? 'selected' : ''}">
+          <td><input type="checkbox" class="custom-checkbox" ${selectedUsers.includes(user.id) ? 'checked' : ''} onchange="toggleSelectUser('${user.id}')"></td>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="glass-avatar glass-avatar-md"><div class="glass-avatar-inner">${user.name.split(' ').map(n => n[0]).join('')}</div><span class="glass-avatar-status status-${user.status}"></span></div>
+              <div class="min-w-0"><p class="text-sm font-medium text-white truncate">${user.name}</p><p class="text-xs text-white/50 truncate">${user.email}</p></div>
+            </div>
+          </td>
+          <td class="hidden md:table-cell"><span class="glass-badge glass-badge-${roleColors[user.role]}">${user.role}</span></td>
+          <td class="hidden lg:table-cell"><span class="text-sm text-white/70">${user.department}</span></td>
+          <td class="hidden xl:table-cell"><span class="text-sm text-white/50">${user.joinDate}</span></td>
+          <td class="hidden sm:table-cell"><span class="text-sm text-white/50">${user.lastActive}</span></td>
+          <td>
+            <div class="flex items-center justify-end gap-1">
+              <button class="p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/[0.06] transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
+              <button class="p-2 rounded-lg text-white/50 hover:text-red-400 hover:bg-red-500/10 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+            </div>
+          </td>
+        </tr>`).join('');
+      document.getElementById('userCount').textContent = users.length;
     }
 
     function filterUsers() {
-      renderUsers();
+      const search = document.getElementById('userSearch').value.toLowerCase();
+      const dept = document.getElementById('deptFilter').value;
+      renderUsers(usersData.filter(user => 
+        (user.name.toLowerCase().includes(search) || user.email.toLowerCase().includes(search) || user.department.toLowerCase().includes(search)) &&
+        (currentRoleFilter === 'all' || user.role === currentRoleFilter) &&
+        (currentStatusFilter === 'all' || user.status === currentStatusFilter) &&
+        (dept === 'all' || user.department === dept)
+      ));
     }
 
-    // Role Filters
-    document.querySelectorAll('#role-filters .filter-pill').forEach(pill => {
-      pill.addEventListener('click', function() {
-        document.querySelectorAll('#role-filters .filter-pill').forEach(p => p.classList.remove('active'));
-        this.classList.add('active');
-        currentRoleFilter = this.dataset.role;
-        renderUsers();
-      });
-    });
+    function setRoleFilter(btn, role) {
+      document.querySelectorAll('#roleFilters .filter-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      currentRoleFilter = role;
+      filterUsers();
+    }
 
-    // Status Filters
-    document.querySelectorAll('#status-filters .filter-pill').forEach(pill => {
-      pill.addEventListener('click', function() {
-        document.querySelectorAll('#status-filters .filter-pill').forEach(p => p.classList.remove('active'));
-        this.classList.add('active');
-        currentStatusFilter = this.dataset.status;
-        renderUsers();
-      });
-    });
+    function setStatusFilter(btn, status) {
+      document.querySelectorAll('#statusFilters .filter-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      currentStatusFilter = status;
+      filterUsers();
+    }
 
-    // Department Filter
-    document.getElementById('dept-filter').addEventListener('change', function() {
-      currentDeptFilter = this.value;
-      renderUsers();
-    });
+    function toggleSelectAll() {
+      selectedUsers = document.getElementById('selectAll').checked ? usersData.map(u => u.id) : [];
+      updateSelectedCount();
+      filterUsers();
+    }
 
-    // Search Input
-    document.getElementById('user-search').addEventListener('input', renderUsers);
+    function toggleSelectUser(id) {
+      selectedUsers = selectedUsers.includes(id) ? selectedUsers.filter(uid => uid !== id) : [...selectedUsers, id];
+      updateSelectedCount();
+      filterUsers();
+    }
 
-    // Select All
-    document.getElementById('select-all').addEventListener('change', function() {
-      if (this.checked) {
-        selectedUsers = usersData.map(u => u.id);
-      } else {
-        selectedUsers = [];
-      }
-      renderUsers();
-    });
+    function updateSelectedCount() {
+      const el = document.getElementById('selectedCount');
+      selectedUsers.length > 0 ? (el.textContent = `${selectedUsers.length} selected`, el.classList.remove('hidden')) : el.classList.add('hidden');
+    }
 
-    // Navigation
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.addEventListener('click', function() {
-        const section = this.dataset.section;
-        
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        this.classList.add('active');
-        
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(section).classList.add('active');
-      });
-    });
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('sidebarOverlay').classList.toggle('opacity-0');
+      document.getElementById('sidebarOverlay').classList.toggle('pointer-events-none');
+    }
 
-    // Profile Tabs
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const tab = this.dataset.tab;
-        
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.getElementById('tab-' + tab).classList.add('active');
-      });
-    });
+    function switchPage(page, btn) {
+      document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+      document.getElementById('page-' + page)?.classList.remove('hidden');
+      document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+      btn?.classList.add('active');
+      if (window.innerWidth < 1024) toggleSidebar();
+    }
 
-    // Image Upload
-    function handleImageUpload(event, type) {
-      const file = event.target.files[0];
+    function switchProfileTab(btn, tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+    }
+
+    function toggleSwitch(el) { el.classList.toggle('active'); }
+
+    function handleImageUpload(input, previewId, containerId) {
+      const file = input.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onloadend = function() {
-          const preview = document.getElementById(type + '-preview');
-          const placeholder = document.getElementById(type + '-placeholder');
-          const overlay = document.getElementById(type + '-overlay');
-          const uploadArea = document.getElementById(type + '-upload');
-          
-          preview.src = reader.result;
-          preview.classList.add('visible');
-          placeholder.style.display = 'none';
-          overlay.classList.add('visible');
-          uploadArea.classList.add('has-image');
+        reader.onloadend = () => {
+          document.getElementById(previewId).innerHTML = `<img src="${reader.result}" alt="Preview" class="w-full h-full object-cover"><div class="image-upload-overlay"><button class="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20" onclick="event.stopPropagation(); document.getElementById('${input.id}').click()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30" onclick="event.stopPropagation(); removeImage('${previewId}', '${containerId}', '${input.id}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button></div>`;
+          document.getElementById(containerId).classList.add('has-image');
         };
         reader.readAsDataURL(file);
       }
     }
 
-    function removeImage(type) {
-      const preview = document.getElementById(type + '-preview');
-      const placeholder = document.getElementById(type + '-placeholder');
-      const overlay = document.getElementById(type + '-overlay');
-      const uploadArea = document.getElementById(type + '-upload');
-      const input = document.getElementById(type + '-input');
-      
-      preview.src = '';
-      preview.classList.remove('visible');
-      placeholder.style.display = 'flex';
-      overlay.classList.remove('visible');
-      uploadArea.classList.remove('has-image');
-      input.value = '';
+    function removeImage(previewId, containerId, inputId) {
+      const icons = {
+        logoPreview: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg><span class="text-xs font-medium">Upload Logo</span><span class="text-[10px]">PNG, JPG up to 2MB</span>',
+        faviconPreview: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="m8 12 2 2 4-4"/></svg><span class="text-xs font-medium">Upload Favicon</span><span class="text-[10px]">ICO, PNG 32x32</span>',
+        coverPreview: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/><path d="m18 2 4 4-8 8h-4v-4l8-8z"/></svg><span class="text-xs font-medium">Upload Cover</span><span class="text-[10px]">1200x630 recommended</span>'
+      };
+      document.getElementById(previewId).innerHTML = `<div class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/40 hover:text-primary transition-colors">${icons[previewId]}</div>`;
+      document.getElementById(containerId).classList.remove('has-image');
+      document.getElementById(inputId).value = '';
     }
 
-    // Profile Image
-    function handleProfileImage(event) {
-      const file = event.target.files[0];
+    function handleProfilePhotoUpload(input) {
+      const file = input.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onloadend = function() {
-          const img = document.getElementById('profile-image');
-          img.src = reader.result;
-          img.classList.add('visible');
-          document.getElementById('remove-profile-btn').style.display = 'inline-flex';
+        reader.onloadend = () => {
+          document.getElementById('profilePhotoPreview').innerHTML = `<img src="${reader.result}" alt="Profile" class="w-full h-full object-cover">`;
+          document.getElementById('removePhotoBtn').classList.remove('hidden');
         };
         reader.readAsDataURL(file);
       }
     }
 
-    function removeProfileImage() {
-      const img = document.getElementById('profile-image');
-      img.src = '';
-      img.classList.remove('visible');
-      document.getElementById('remove-profile-btn').style.display = 'none';
-      document.getElementById('profile-input').value = '';
+    function removeProfilePhoto() {
+      document.getElementById('profilePhotoPreview').innerHTML = '<div class="w-full h-full flex items-center justify-center text-3xl font-bold text-white/60">JD</div>';
+      document.getElementById('profilePhotoInput').value = '';
+      document.getElementById('removePhotoBtn').classList.add('hidden');
     }
 
-    // Password Strength
     function updatePasswordStrength() {
-      const password = document.getElementById('new-password').value;
-      const strengthEl = document.getElementById('password-strength');
-      const fillEl = document.getElementById('strength-bar-fill');
-      const badgeEl = document.getElementById('strength-badge');
-      
-      if (password.length > 0) {
-        strengthEl.classList.add('visible');
-        
-        if (password.length >= 12) {
-          fillEl.className = 'strength-bar-fill strong';
-          badgeEl.className = 'badge badge-success';
-          badgeEl.textContent = 'Strong';
-        } else if (password.length >= 8) {
-          fillEl.className = 'strength-bar-fill medium';
-          badgeEl.className = 'badge';
-          badgeEl.style.background = 'rgba(245, 158, 11, 0.15)';
-          badgeEl.style.color = '#f59e0b';
-          badgeEl.style.border = '1px solid rgba(245, 158, 11, 0.2)';
-          badgeEl.textContent = 'Medium';
-        } else {
-          fillEl.className = 'strength-bar-fill weak';
-          badgeEl.className = 'badge badge-danger';
-          badgeEl.textContent = 'Weak';
-        }
-      } else {
-        strengthEl.classList.remove('visible');
-      }
+      const password = document.getElementById('newPassword').value;
+      const el = document.getElementById('passwordStrength');
+      if (password) {
+        el.classList.remove('hidden');
+        const bar = document.getElementById('strengthBar');
+        const badge = document.getElementById('strengthBadge');
+        if (password.length >= 12) { bar.className = 'h-full rounded-full bg-emerald-500 w-full transition-all duration-300'; badge.className = 'glass-badge glass-badge-success'; badge.textContent = 'Strong'; }
+        else if (password.length >= 8) { bar.className = 'h-full rounded-full bg-amber-500 w-2/3 transition-all duration-300'; badge.className = 'glass-badge glass-badge-warning'; badge.textContent = 'Medium'; }
+        else { bar.className = 'h-full rounded-full bg-red-500 w-1/3 transition-all duration-300'; badge.className = 'glass-badge glass-badge-danger'; badge.textContent = 'Weak'; }
+      } else el.classList.add('hidden');
+      checkPasswordMatch();
     }
 
-    // Initial render
-    renderUsers();
+    function checkPasswordMatch() {
+      const error = document.getElementById('passwordMatchError');
+      const confirm = document.getElementById('confirmPassword').value;
+      confirm && confirm !== document.getElementById('newPassword').value ? error.classList.remove('hidden') : error.classList.add('hidden');
+    }
   </script>
 </body>
 </html>

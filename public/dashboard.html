@@ -4,905 +4,1180 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Glassmorphism Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1856ff',
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    * {
+    * { box-sizing: border-box; }
+    body { 
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a12;
+      min-height: 100vh;
       margin: 0;
-      padding: 0;
-      box-sizing: border-box;
     }
-
-    :root {
-      --bg-dark: #0a0a0f;
-      --glass-bg: rgba(255, 255, 255, 0.04);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --glass-hover: rgba(255, 255, 255, 0.08);
-      --text-primary: #ffffff;
-      --text-secondary: rgba(255, 255, 255, 0.6);
-      --text-muted: rgba(255, 255, 255, 0.4);
-      --primary: #6366f1;
-      --primary-glow: rgba(99, 102, 241, 0.4);
-      --success: #22c55e;
-      --warning: #f59e0b;
-      --error: #ef4444;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg-dark);
-      color: var(--text-primary);
-      min-height: 100vh;
-      line-height: 1.5;
-    }
-
-    /* Layout */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    .sidebar {
+    /* Gradient Background */
+    .gradient-bg {
       position: fixed;
-      left: 0;
-      top: 0;
-      width: 260px;
-      height: 100vh;
-      background: var(--glass-bg);
-      border-right: 1px solid var(--glass-border);
-      backdrop-filter: blur(20px);
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .gradient-orb-1 {
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(24,86,255,0.4) 0%, rgba(24,86,255,0.1) 40%, transparent 70%);
+      filter: blur(80px);
+      opacity: 0.3;
+      animation: pulse 8s ease-in-out infinite;
+    }
+    .gradient-orb-2 {
+      position: absolute;
+      bottom: -20%;
+      left: -15%;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,0.4) 0%, rgba(124,58,237,0.1) 40%, transparent 70%);
+      filter: blur(80px);
+      opacity: 0.25;
+      animation: pulse 10s ease-in-out infinite;
+    }
+    .gradient-orb-3 {
+      position: absolute;
+      top: 30%;
+      left: 40%;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 60%);
+      filter: blur(60px);
+      opacity: 0.2;
+      animation: pulse 12s ease-in-out infinite reverse;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.05); }
+    }
+    /* Glass Card */
+    .glass-card {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 1rem;
       padding: 1.5rem;
-      z-index: 100;
     }
-
-    .main-content {
-      margin-left: 260px;
-      padding: 2rem;
-      min-height: 100vh;
+    .glass-card-heavy {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
     }
-
-    /* Sidebar Navigation */
-    .logo {
-      display: flex;
+    .glass-card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.15);
+    }
+    /* Glass Input */
+    .glass-input {
+      height: 2.75rem;
+      width: 100%;
+      border-radius: 0.75rem;
+      padding: 0 1rem;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .glass-input::placeholder { color: rgba(255,255,255,0.4); }
+    .glass-input:focus {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(24,86,255,0.4);
+      box-shadow: 0 0 0 2px rgba(24,86,255,0.5);
+    }
+    /* Glass Button */
+    .glass-btn {
+      display: inline-flex;
       align-items: center;
-      gap: 0.75rem;
-      padding: 0.5rem;
-      margin-bottom: 2rem;
+      justify-content: center;
+      font-weight: 500;
+      transition: all 0.2s;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      border: none;
     }
-
-    .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, var(--primary), #8b5cf6);
-      border-radius: 12px;
+    .glass-btn-primary {
+      background: #1856ff;
+      color: white;
+      height: 2.5rem;
+      padding: 0 1.25rem;
+      font-size: 0.875rem;
+      box-shadow: 0 10px 15px -3px rgba(24,86,255,0.25);
+    }
+    .glass-btn-primary:hover { background: rgba(24,86,255,0.9); }
+    .glass-btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.1);
+      height: 2.5rem;
+      padding: 0 1.25rem;
+      font-size: 0.875rem;
+      backdrop-filter: blur(12px);
+    }
+    .glass-btn-secondary:hover { background: rgba(255,255,255,0.1); }
+    .glass-btn-ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.8);
+      padding: 0.625rem;
+    }
+    .glass-btn-ghost:hover { 
+      background: rgba(255,255,255,0.08);
+      color: white;
+    }
+    .glass-btn-sm {
+      height: 2rem;
+      padding: 0 0.75rem;
+      font-size: 0.875rem;
+      border-radius: 0.5rem;
+    }
+    .glass-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    /* Glass Badge */
+    .glass-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 9999px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      backdrop-filter: blur(8px);
+      border: 1px solid;
+    }
+    .glass-badge-default { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.1); }
+    .glass-badge-primary { background: rgba(24,86,255,0.2); color: #1856ff; border-color: rgba(24,86,255,0.3); }
+    .glass-badge-success { background: rgba(16,185,129,0.2); color: #34d399; border-color: rgba(16,185,129,0.3); }
+    .glass-badge-warning { background: rgba(245,158,11,0.2); color: #fbbf24; border-color: rgba(245,158,11,0.3); }
+    .glass-badge-danger { background: rgba(239,68,68,0.2); color: #f87171; border-color: rgba(239,68,68,0.3); }
+    /* Glass Avatar */
+    .glass-avatar {
+      position: relative;
+      display: inline-block;
+    }
+    .glass-avatar-inner {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(24,86,255,0.3), rgba(124,58,237,0.3));
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-weight: 500;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.875rem;
     }
-
-    .logo-text {
-      font-size: 1.25rem;
-      font-weight: 600;
+    .glass-avatar-md .glass-avatar-inner { width: 2.5rem; height: 2.5rem; font-size: 0.875rem; }
+    .glass-avatar-sm .glass-avatar-inner { width: 2rem; height: 2rem; font-size: 0.75rem; }
+    .glass-avatar-status {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0.625rem;
+      height: 0.625rem;
+      border-radius: 50%;
+      border: 2px solid #0a0a12;
     }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.875rem 1rem;
-      border-radius: 12px;
-      color: var(--text-secondary);
+    .status-online { background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,0.5); }
+    .status-offline { background: rgba(255,255,255,0.3); }
+    .status-away { background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.5); }
+    .status-busy { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.5); }
+    /* Glass Toggle */
+    .glass-toggle {
+      position: relative;
+      width: 2.75rem;
+      height: 1.5rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 9999px;
       cursor: pointer;
       transition: all 0.2s;
-      margin-bottom: 0.25rem;
+      border: 1px solid rgba(255,255,255,0.1);
     }
-
-    .nav-item:hover {
-      background: var(--glass-hover);
-      color: var(--text-primary);
+    .glass-toggle.active {
+      background: #1856ff;
+      border-color: rgba(24,86,255,0.5);
     }
-
-    .nav-item.active {
-      background: var(--primary);
-      color: white;
+    .glass-toggle-knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 1.125rem;
+      height: 1.125rem;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-
-    .nav-item svg {
-      width: 20px;
-      height: 20px;
+    .glass-toggle.active .glass-toggle-knob {
+      left: calc(100% - 1.125rem - 2px);
     }
-
-    /* Glass Card */
-    .glass-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      backdrop-filter: blur(20px);
-      padding: 1.5rem;
-    }
-
-    .card-header {
+    /* Tabs */
+    .tab-btn {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-    }
-
-    .card-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-    }
-
-    .card-description {
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-      margin-top: 0.25rem;
-    }
-
-    /* Form Elements */
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
-
-    .form-label {
-      display: block;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
       font-size: 0.875rem;
       font-weight: 500;
-      margin-bottom: 0.5rem;
-      color: var(--text-secondary);
-    }
-
-    .form-input {
-      width: 100%;
-      height: 44px;
-      padding: 0 1rem;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      color: var(--text-primary);
-      font-size: 0.9375rem;
+      color: rgba(255,255,255,0.5);
       transition: all 0.2s;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-glow);
-    }
-
-    .form-input::placeholder {
-      color: var(--text-muted);
-    }
-
-    /* Search Bar */
-    .search-container {
-      display: flex;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .search-wrapper {
       position: relative;
-      flex: 1;
+      white-space: nowrap;
+      background: none;
+      border: none;
+      cursor: pointer;
     }
-
-    .search-icon {
+    .tab-btn:hover { color: rgba(255,255,255,0.8); }
+    .tab-btn.active { color: #1856ff; }
+    .tab-btn.active svg { color: #1856ff; }
+    .tab-btn.active::after {
+      content: '';
       position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #1856ff;
     }
-
-    .search-input {
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    /* Sidebar */
+    .sidebar-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      transition: all 0.2s;
       width: 100%;
-      height: 44px;
-      padding: 0 1rem 0 2.75rem;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      color: var(--text-primary);
-      font-size: 0.9375rem;
+      text-align: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
     }
-
-    .search-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-glow);
+    .sidebar-btn:hover { 
+      color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.04);
     }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
+    .sidebar-btn.active {
+      background: rgba(24,86,255,0.15);
+      color: #1856ff;
+      border: 1px solid rgba(24,86,255,0.2);
+    }
+    .sidebar-btn.active svg { color: #1856ff; }
+    /* Filter Pill */
+    .filter-pill {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,0.6);
+    }
+    .filter-pill:hover {
+      color: white;
+      background: rgba(255,255,255,0.06);
+    }
+    .filter-pill.active {
+      background: #1856ff;
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(24,86,255,0.25);
+    }
+    /* Image Upload */
+    .image-upload {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 1rem;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: rgba(255,255,255,0.03);
+      border: 2px dashed rgba(255,255,255,0.1);
+    }
+    .image-upload:hover { border-color: rgba(24,86,255,0.5); }
+    .image-upload.has-image { border-style: solid; }
+    .image-upload-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      padding: 0 1.25rem;
-      height: 44px;
-      border-radius: 12px;
-      font-size: 0.9375rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
+      opacity: 0;
+      transition: opacity 0.2s;
     }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #5558e3;
-      box-shadow: 0 0 20px var(--primary-glow);
-    }
-
-    .btn-ghost {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      color: var(--text-primary);
-    }
-
-    .btn-ghost:hover {
-      background: var(--glass-hover);
-    }
-
+    .image-upload:hover .image-upload-overlay { opacity: 1; }
     /* Table */
-    .table-container {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th, td {
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th {
       padding: 1rem;
       text-align: left;
-      border-bottom: 1px solid var(--glass-border);
-    }
-
-    th {
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--text-muted);
     }
-
-    td {
-      font-size: 0.9375rem;
+    .data-table td { padding: 1rem; }
+    .data-table tr { 
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.2s;
     }
-
-    tr:hover td {
-      background: var(--glass-hover);
-    }
-
-    .user-cell {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), #8b5cf6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 0.875rem;
-    }
-
-    .user-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .user-name {
-      font-weight: 500;
-    }
-
-    .user-email {
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-    }
-
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.375rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-
-    .status-active {
-      background: rgba(34, 197, 94, 0.15);
-      color: var(--success);
-    }
-
-    .status-inactive {
-      background: rgba(239, 68, 68, 0.15);
-      color: var(--error);
-    }
-
-    .status-pending {
-      background: rgba(245, 158, 11, 0.15);
-      color: var(--warning);
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-
-    /* Tabs */
-    .tabs {
-      display: flex;
-      gap: 0.25rem;
-      background: var(--glass-bg);
-      padding: 0.25rem;
-      border-radius: 12px;
-      margin-bottom: 1.5rem;
-    }
-
-    .tab {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-secondary);
+    .data-table thead tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .data-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+    .data-table tbody tr.selected { background: rgba(24,86,255,0.05); }
+    /* Custom Checkbox */
+    .custom-checkbox {
+      width: 1rem;
+      height: 1rem;
+      border-radius: 0.25rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.2);
       cursor: pointer;
-      transition: all 0.2s;
-      border: none;
-      background: transparent;
-      text-align: center;
-    }
-
-    .tab:hover {
-      color: var(--text-primary);
-    }
-
-    .tab.active {
-      background: var(--primary);
-      color: white;
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    /* Image Upload */
-    .image-upload {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      padding: 2rem;
-      border: 2px dashed var(--glass-border);
-      border-radius: 12px;
-      cursor: pointer;
+      appearance: none;
       transition: all 0.2s;
     }
-
-    .image-upload:hover {
-      border-color: var(--primary);
-      background: var(--glass-hover);
+    .custom-checkbox:checked {
+      background: #1856ff;
+      border-color: #1856ff;
     }
-
-    .image-upload.has-image {
-      border-style: solid;
-    }
-
-    .upload-preview {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: none;
-    }
-
-    .upload-preview.visible {
-      display: block;
-    }
-
-    .upload-placeholder {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-    }
-
-    .upload-placeholder.hidden {
-      display: none;
-    }
-
-    .upload-text {
-      text-align: center;
-    }
-
-    .upload-text-main {
-      font-weight: 500;
-      color: var(--text-primary);
-    }
-
-    .upload-text-sub {
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-      margin-top: 0.25rem;
-    }
-
-    #file-input {
-      display: none;
-    }
-
-    /* Page Header */
-    .page-header {
-      margin-bottom: 2rem;
-    }
-
-    .page-title {
-      font-size: 1.75rem;
-      font-weight: 700;
-    }
-
-    .page-description {
-      color: var(--text-secondary);
-      margin-top: 0.5rem;
-    }
-
-    /* Grid */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-
-    /* Sections */
-    .section {
-      display: none;
-    }
-
-    .section.active {
-      display: block;
-    }
-
-    /* Form Actions */
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.75rem;
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--glass-border);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .main-content {
-        margin-left: 0;
-      }
-
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-
-      .search-container {
-        flex-direction: column;
-      }
-
-      .tabs {
-        flex-direction: column;
-      }
-    }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="logo">
-      <div class="logo-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-          <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-          <polyline points="2 17 12 22 22 17"/>
-          <polyline points="2 12 12 17 22 12"/>
-        </svg>
-      </div>
-      <span class="logo-text">GlassUI</span>
-    </div>
-
-    <nav>
-      <div class="nav-item" data-section="users">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        <span>Users</span>
-      </div>
-      <div class="nav-item" data-section="settings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-        </svg>
-        <span>Settings</span>
-      </div>
-      <div class="nav-item" data-section="profile">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
-        <span>Profile</span>
-      </div>
-    </nav>
-  </aside>
+  <!-- Gradient Background -->
+  <div class="gradient-bg">
+    <div class="gradient-orb-1"></div>
+    <div class="gradient-orb-2"></div>
+    <div class="gradient-orb-3"></div>
+  </div>
 
   <!-- Main Content -->
-  <main class="main-content">
-    <!-- Users Section -->
-    <section id="users" class="section active">
-      <div class="page-header">
-        <h1 class="page-title">Users</h1>
-        <p class="page-description">Manage and search your user database</p>
-      </div>
-
-      <div class="glass-card">
-        <div class="search-container">
-          <div class="search-wrapper">
-            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.3-4.3"/>
+  <div class="relative z-10 min-h-screen">
+    <div class="container mx-auto px-4 py-6 max-w-[1600px]">
+      
+      <!-- Header -->
+      <div class="glass-card glass-card-heavy flex items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/[0.06] transition-colors" onclick="toggleSidebar()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
-            <input type="text" id="user-search" class="search-input" placeholder="Search by name, email, or role...">
-          </div>
-          <button class="btn btn-primary" onclick="searchUsers()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.3-4.3"/>
-            </svg>
-            Search
           </button>
-        </div>
-
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Last Active</th>
-              </tr>
-            </thead>
-            <tbody id="users-table">
-              <tr>
-                <td>
-                  <div class="user-cell">
-                    <div class="avatar">JD</div>
-                    <div class="user-info">
-                      <span class="user-name">John Doe</span>
-                      <span class="user-email">john.doe@example.com</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Admin</td>
-                <td><span class="status-badge status-active"><span class="status-dot"></span>Active</span></td>
-                <td>2 mins ago</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="user-cell">
-                    <div class="avatar">SM</div>
-                    <div class="user-info">
-                      <span class="user-name">Sarah Miller</span>
-                      <span class="user-email">sarah.m@example.com</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Editor</td>
-                <td><span class="status-badge status-active"><span class="status-dot"></span>Active</span></td>
-                <td>15 mins ago</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="user-cell">
-                    <div class="avatar">MJ</div>
-                    <div class="user-info">
-                      <span class="user-name">Mike Johnson</span>
-                      <span class="user-email">mike.j@example.com</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Viewer</td>
-                <td><span class="status-badge status-pending"><span class="status-dot"></span>Pending</span></td>
-                <td>1 hour ago</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="user-cell">
-                    <div class="avatar">EW</div>
-                    <div class="user-info">
-                      <span class="user-name">Emily Wilson</span>
-                      <span class="user-email">emily.w@example.com</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Editor</td>
-                <td><span class="status-badge status-inactive"><span class="status-dot"></span>Inactive</span></td>
-                <td>3 days ago</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="user-cell">
-                    <div class="avatar">AB</div>
-                    <div class="user-info">
-                      <span class="user-name">Alex Brown</span>
-                      <span class="user-email">alex.b@example.com</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Admin</td>
-                <td><span class="status-badge status-active"><span class="status-dot"></span>Active</span></td>
-                <td>Just now</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- Settings Section -->
-    <section id="settings" class="section">
-      <div class="page-header">
-        <h1 class="page-title">Settings</h1>
-        <p class="page-description">Manage your account settings and preferences</p>
-      </div>
-
-      <div class="glass-card">
-        <div class="card-header">
-          <div>
-            <h2 class="card-title">Profile Picture</h2>
-            <p class="card-description">Upload a new profile picture</p>
+          <div class="hidden lg:flex items-center gap-3">
+            <div class="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-violet-500/20 border border-primary/20">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary">
+                <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-lg font-bold text-white">Analytics Dashboard</h1>
+              <p class="text-xs text-white/50">Real-time insights</p>
+            </div>
           </div>
+          <h1 class="lg:hidden text-base font-semibold text-white">Analytics</h1>
         </div>
-
-        <div class="image-upload" id="upload-area" onclick="document.getElementById('file-input').click()">
-          <input type="file" id="file-input" accept="image/*" onchange="previewImage(event)">
-          <div class="upload-placeholder" id="upload-placeholder">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="17 8 12 3 7 8"/>
-              <line x1="12" y1="3" x2="12" y2="15"/>
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:block w-48 md:w-64">
+            <input type="text" placeholder="Search..." class="glass-input">
+          </div>
+          <button class="glass-btn glass-btn-ghost sm:hidden">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/70">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
             </svg>
-          </div>
-          <img id="upload-preview" class="upload-preview" src="" alt="Preview">
-          <div class="upload-text">
-            <p class="upload-text-main">Click to upload or drag and drop</p>
-            <p class="upload-text-sub">PNG, JPG or GIF (max. 2MB)</p>
-          </div>
-        </div>
-
-        <div class="form-actions">
-          <button class="btn btn-ghost">Cancel</button>
-          <button class="btn btn-primary">Save Changes</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Profile Section -->
-    <section id="profile" class="section">
-      <div class="page-header">
-        <h1 class="page-title">Profile</h1>
-        <p class="page-description">Manage your personal information</p>
-      </div>
-
-      <div class="glass-card">
-        <div class="tabs">
-          <button class="tab active" data-tab="information">Information</button>
-          <button class="tab" data-tab="password">Password</button>
-          <button class="tab" data-tab="address">Address</button>
-        </div>
-
-        <!-- Information Tab -->
-        <div id="information" class="tab-content active">
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">First Name</label>
-              <input type="text" class="form-input" placeholder="John" value="John">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Last Name</label>
-              <input type="text" class="form-input" placeholder="Doe" value="Doe">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input type="email" class="form-input" placeholder="john@example.com" value="john.doe@example.com">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Phone Number</label>
-            <input type="tel" class="form-input" placeholder="+1 (555) 000-0000" value="+1 (555) 123-4567">
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-ghost">Cancel</button>
-            <button class="btn btn-primary">Save Changes</button>
-          </div>
-        </div>
-
-        <!-- Password Tab -->
-        <div id="password" class="tab-content">
-          <div class="form-group">
-            <label class="form-label">Current Password</label>
-            <input type="password" class="form-input" placeholder="Enter current password">
-          </div>
-          <div class="form-group">
-            <label class="form-label">New Password</label>
-            <input type="password" class="form-input" placeholder="Enter new password">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Confirm New Password</label>
-            <input type="password" class="form-input" placeholder="Confirm new password">
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-ghost">Cancel</button>
-            <button class="btn btn-primary">Update Password</button>
-          </div>
-        </div>
-
-        <!-- Address Tab -->
-        <div id="address" class="tab-content">
-          <div class="form-group">
-            <label class="form-label">Street Address</label>
-            <input type="text" class="form-input" placeholder="123 Main Street" value="123 Innovation Drive">
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">City</label>
-              <input type="text" class="form-input" placeholder="City" value="San Francisco">
-            </div>
-            <div class="form-group">
-              <label class="form-label">State / Province</label>
-              <input type="text" class="form-input" placeholder="State" value="California">
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">ZIP / Postal Code</label>
-              <input type="text" class="form-input" placeholder="12345" value="94102">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Country</label>
-              <input type="text" class="form-input" placeholder="Country" value="United States">
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-ghost">Cancel</button>
-            <button class="btn btn-primary">Save Address</button>
+          </button>
+          <button class="glass-btn glass-btn-ghost relative">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/70">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+          </button>
+          <button class="glass-btn glass-btn-ghost hidden sm:flex">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/70">
+              <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+          <div class="hidden sm:block h-8 w-px bg-white/10"></div>
+          <div class="glass-avatar glass-avatar-sm">
+            <div class="glass-avatar-inner">JD</div>
+            <span class="glass-avatar-status status-online"></span>
           </div>
         </div>
       </div>
-    </section>
-  </main>
+
+      <div class="flex gap-6">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 z-50 lg:relative lg:z-0 lg:w-64 lg:h-auto shrink-0 transition-transform duration-300 -translate-x-full lg:translate-x-0">
+          <div class="h-full lg:h-auto bg-[#0c0c14]/95 lg:bg-white/[0.03] backdrop-blur-xl border-r lg:border border-white/[0.08] lg:rounded-2xl p-4 lg:p-3">
+            <div class="flex items-center justify-between mb-6 lg:hidden">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-violet-500/20 border border-primary/20">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary">
+                    <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+                  </svg>
+                </div>
+                <span class="text-white font-semibold">Analytics</span>
+              </div>
+              <button onclick="toggleSidebar()" class="p-2 rounded-xl text-white/60 hover:text-white hover:bg-white/[0.06] transition-colors">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+            <nav class="flex flex-col gap-1">
+              <button class="sidebar-btn" data-page="dashboard" onclick="switchPage('dashboard', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span>Dashboard</span>
+              </button>
+              <button class="sidebar-btn" data-page="analytics" onclick="switchPage('analytics', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+                </svg>
+                <span>Analytics</span>
+                <span class="ml-auto text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary">New</span>
+              </button>
+              <button class="sidebar-btn active" data-page="users" onclick="switchPage('users', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                <span>Users</span>
+                <span class="ml-auto text-xs px-2 py-0.5 rounded-full bg-white/10 text-white/70">128</span>
+              </button>
+              <button class="sidebar-btn" data-page="components" onclick="switchPage('components', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+                </svg>
+                <span>Components</span>
+              </button>
+              <button class="sidebar-btn" data-page="profile" onclick="switchPage('profile', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span>Profile</span>
+              </button>
+              <button class="sidebar-btn" data-page="settings" onclick="switchPage('settings', this)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+                <span>Settings</span>
+              </button>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-white/[0.06] lg:hidden">
+              <div class="flex items-center gap-3 px-2">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center text-white font-semibold text-sm">JD</div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-white truncate">John Doe</p>
+                  <p class="text-xs text-white/50 truncate">john@example.com</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden opacity-0 pointer-events-none transition-opacity" onclick="toggleSidebar()"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0">
+          
+          <!-- USERS PAGE -->
+          <div id="page-users" class="page-content">
+            <div class="space-y-6">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl sm:text-2xl font-bold text-white">Users</h1>
+                  <p class="text-sm text-white/50 mt-1">Manage your team members and their permissions</p>
+                </div>
+                <button class="glass-btn glass-btn-primary gap-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                  Add User
+                </button>
+              </div>
+
+              <div class="glass-card">
+                <div class="flex flex-col gap-4">
+                  <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1">
+                      <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                      </svg>
+                      <input type="text" id="userSearch" placeholder="Search by name, email, or department..." class="glass-input pl-10" oninput="filterUsers()">
+                    </div>
+                    <button class="glass-btn glass-btn-primary gap-2 shrink-0" onclick="filterUsers()">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                      </svg>
+                      Search
+                    </button>
+                  </div>
+
+                  <div class="flex flex-wrap gap-3">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs text-white/50">Role:</span>
+                      <div class="flex gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]" id="roleFilters">
+                        <button class="filter-pill active" onclick="setRoleFilter(this, 'all')">All</button>
+                        <button class="filter-pill" onclick="setRoleFilter(this, 'Admin')">Admin</button>
+                        <button class="filter-pill" onclick="setRoleFilter(this, 'Editor')">Editor</button>
+                        <button class="filter-pill" onclick="setRoleFilter(this, 'Viewer')">Viewer</button>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs text-white/50">Status:</span>
+                      <div class="flex gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]" id="statusFilters">
+                        <button class="filter-pill active" onclick="setStatusFilter(this, 'all')">All</button>
+                        <button class="filter-pill flex items-center gap-1.5" onclick="setStatusFilter(this, 'online')"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>online</button>
+                        <button class="filter-pill flex items-center gap-1.5" onclick="setStatusFilter(this, 'away')"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>away</button>
+                        <button class="filter-pill flex items-center gap-1.5" onclick="setStatusFilter(this, 'busy')"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>busy</button>
+                        <button class="filter-pill flex items-center gap-1.5" onclick="setStatusFilter(this, 'offline')"><span class="w-1.5 h-1.5 rounded-full bg-white/30"></span>offline</button>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs text-white/50">Dept:</span>
+                      <select id="deptFilter" onchange="filterUsers()" class="h-9 px-3 rounded-lg bg-white/[0.04] border border-white/[0.1] text-sm text-white focus:outline-none cursor-pointer">
+                        <option value="all" class="bg-[#0a0a12]">All Departments</option>
+                        <option value="Engineering" class="bg-[#0a0a12]">Engineering</option>
+                        <option value="Marketing" class="bg-[#0a0a12]">Marketing</option>
+                        <option value="Design" class="bg-[#0a0a12]">Design</option>
+                        <option value="Operations" class="bg-[#0a0a12]">Operations</option>
+                        <option value="Sales" class="bg-[#0a0a12]">Sales</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-white/50">Showing <span id="userCount" class="text-white font-medium">8</span> of 8 users</span>
+                    <span id="selectedCount" class="text-primary hidden">0 selected</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="glass-card p-0 overflow-hidden">
+                <div class="overflow-x-auto">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="w-12"><input type="checkbox" class="custom-checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+                        <th>User</th>
+                        <th class="hidden md:table-cell">Role</th>
+                        <th class="hidden lg:table-cell">Department</th>
+                        <th class="hidden xl:table-cell">Join Date</th>
+                        <th class="hidden sm:table-cell">Last Active</th>
+                        <th class="text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="usersTableBody"></tbody>
+                  </table>
+                </div>
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-white/[0.06]">
+                  <span class="text-sm text-white/50">Page 1 of 1</span>
+                  <div class="flex items-center gap-2">
+                    <button class="glass-btn glass-btn-secondary glass-btn-sm" disabled>Previous</button>
+                    <button class="glass-btn glass-btn-secondary glass-btn-sm" disabled>Next</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SETTINGS PAGE -->
+          <div id="page-settings" class="page-content hidden">
+            <div class="space-y-6">
+              <div>
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Settings</h1>
+                <p class="text-sm text-white/50 mt-1">Configure your workspace preferences and branding</p>
+              </div>
+
+              <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <div class="glass-card xl:col-span-2">
+                  <h2 class="text-lg font-semibold text-white mb-6">Branding</h2>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-3">
+                      <label class="text-sm font-medium text-white/80">Company Logo</label>
+                      <div class="image-upload" id="logoUpload" onclick="document.getElementById('logoInput').click()">
+                        <div id="logoPreview" class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/40 hover:text-primary transition-colors">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                          </svg>
+                          <span class="text-xs font-medium">Upload Logo</span>
+                          <span class="text-[10px]">PNG, JPG up to 2MB</span>
+                        </div>
+                        <input type="file" id="logoInput" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'logoPreview', 'logoUpload')">
+                      </div>
+                    </div>
+                    <div class="space-y-3">
+                      <label class="text-sm font-medium text-white/80">Favicon</label>
+                      <div class="image-upload" id="faviconUpload" onclick="document.getElementById('faviconInput').click()">
+                        <div id="faviconPreview" class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/40 hover:text-primary transition-colors">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/><path d="m8 12 2 2 4-4"/>
+                          </svg>
+                          <span class="text-xs font-medium">Upload Favicon</span>
+                          <span class="text-[10px]">ICO, PNG 32x32</span>
+                        </div>
+                        <input type="file" id="faviconInput" accept="image/*,.ico" class="hidden" onchange="handleImageUpload(this, 'faviconPreview', 'faviconUpload')">
+                      </div>
+                    </div>
+                    <div class="space-y-3">
+                      <label class="text-sm font-medium text-white/80">Cover Image</label>
+                      <div class="image-upload" id="coverUpload" onclick="document.getElementById('coverInput').click()">
+                        <div id="coverPreview" class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/40 hover:text-primary transition-colors">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/><path d="m18 2 4 4-8 8h-4v-4l8-8z"/>
+                          </svg>
+                          <span class="text-xs font-medium">Upload Cover</span>
+                          <span class="text-[10px]">1200x630 recommended</span>
+                        </div>
+                        <input type="file" id="coverInput" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'coverPreview', 'coverUpload')">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="glass-card">
+                  <h2 class="text-lg font-semibold text-white mb-6">General Settings</h2>
+                  <div class="space-y-5">
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-medium text-white/80">Company Name</label>
+                      <input type="text" value="Acme Analytics" class="glass-input">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-medium text-white/80">Website URL</label>
+                      <input type="url" value="https://analytics.acme.com" class="glass-input">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-medium text-white/80">Support Email</label>
+                      <input type="email" value="support@acme.com" class="glass-input">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-medium text-white/80">Timezone</label>
+                      <select class="glass-input cursor-pointer">
+                        <option value="America/New_York" class="bg-[#0a0a12]" selected>Eastern Time (ET)</option>
+                        <option value="America/Chicago" class="bg-[#0a0a12]">Central Time (CT)</option>
+                        <option value="America/Denver" class="bg-[#0a0a12]">Mountain Time (MT)</option>
+                        <option value="America/Los_Angeles" class="bg-[#0a0a12]">Pacific Time (PT)</option>
+                        <option value="Europe/London" class="bg-[#0a0a12]">London (GMT)</option>
+                        <option value="Europe/Paris" class="bg-[#0a0a12]">Paris (CET)</option>
+                      </select>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-medium text-white/80">Language</label>
+                      <select class="glass-input cursor-pointer">
+                        <option value="en" class="bg-[#0a0a12]" selected>English</option>
+                        <option value="es" class="bg-[#0a0a12]">Spanish</option>
+                        <option value="fr" class="bg-[#0a0a12]">French</option>
+                        <option value="de" class="bg-[#0a0a12]">German</option>
+                        <option value="ja" class="bg-[#0a0a12]">Japanese</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="glass-card">
+                  <h2 class="text-lg font-semibold text-white mb-6">Notifications & Security</h2>
+                  <div class="space-y-5">
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div>
+                        <p class="text-sm font-medium text-white">Email Notifications</p>
+                        <p class="text-xs text-white/50">Receive updates via email</p>
+                      </div>
+                      <div class="glass-toggle active" onclick="toggleSwitch(this)"><div class="glass-toggle-knob"></div></div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div>
+                        <p class="text-sm font-medium text-white">Push Notifications</p>
+                        <p class="text-xs text-white/50">Browser push alerts</p>
+                      </div>
+                      <div class="glass-toggle active" onclick="toggleSwitch(this)"><div class="glass-toggle-knob"></div></div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div>
+                        <p class="text-sm font-medium text-white">Weekly Report</p>
+                        <p class="text-xs text-white/50">Get summary every Monday</p>
+                      </div>
+                      <div class="glass-toggle active" onclick="toggleSwitch(this)"><div class="glass-toggle-knob"></div></div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div>
+                        <p class="text-sm font-medium text-white">Two-Factor Auth</p>
+                        <p class="text-xs text-white/50">Extra login security</p>
+                      </div>
+                      <div class="glass-toggle" onclick="toggleSwitch(this)"><div class="glass-toggle-knob"></div></div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div>
+                        <p class="text-sm font-medium text-white">Public Profile</p>
+                        <p class="text-xs text-white/50">Allow others to find you</p>
+                      </div>
+                      <div class="glass-toggle active" onclick="toggleSwitch(this)"><div class="glass-toggle-knob"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-3">
+                <button class="glass-btn glass-btn-secondary">Cancel</button>
+                <button class="glass-btn glass-btn-primary">Save Changes</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROFILE PAGE -->
+          <div id="page-profile" class="page-content hidden">
+            <div class="space-y-6">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl sm:text-2xl font-bold text-white">Profile</h1>
+                  <p class="text-sm text-white/50 mt-1">Manage your personal information and preferences</p>
+                </div>
+                <span class="glass-badge glass-badge-success self-start sm:self-auto">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+                  Profile Complete
+                </span>
+              </div>
+
+              <div class="glass-card p-0 overflow-hidden">
+                <div class="flex border-b border-white/[0.06] overflow-x-auto">
+                  <button class="tab-btn active" onclick="switchProfileTab(this, 'information')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/40">
+                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Information
+                  </button>
+                  <button class="tab-btn" onclick="switchProfileTab(this, 'password')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/40">
+                      <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    Password
+                  </button>
+                  <button class="tab-btn" onclick="switchProfileTab(this, 'address')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/40">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Address
+                  </button>
+                </div>
+
+                <div class="p-5 sm:p-6">
+                  <!-- Information Tab -->
+                  <div id="tab-information" class="tab-content active">
+                    <div class="space-y-6">
+                      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                        <div class="relative group">
+                          <div class="w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-primary/30 to-violet-500/30 border-2 border-white/[0.1]" id="profilePhotoContainer">
+                            <div id="profilePhotoPreview" class="w-full h-full flex items-center justify-center text-3xl font-bold text-white/60">JD</div>
+                          </div>
+                          <button onclick="document.getElementById('profilePhotoInput').click()" class="absolute -bottom-2 -right-2 p-2 rounded-xl bg-primary text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                          </button>
+                          <input type="file" id="profilePhotoInput" accept="image/*" class="hidden" onchange="handleProfilePhotoUpload(this)">
+                        </div>
+                        <div class="flex-1">
+                          <h3 class="text-lg font-semibold text-white">Profile Photo</h3>
+                          <p class="text-sm text-white/50 mt-1">Upload a photo to personalize your account. JPG, PNG or GIF, max 2MB.</p>
+                          <div class="flex gap-2 mt-3">
+                            <button class="glass-btn glass-btn-secondary glass-btn-sm" onclick="document.getElementById('profilePhotoInput').click()">Upload New</button>
+                            <button id="removePhotoBtn" class="glass-btn glass-btn-ghost glass-btn-sm hidden" onclick="removeProfilePhoto()">Remove</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">First Name</label><input type="text" value="John" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Last Name</label><input type="text" value="Doe" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Email Address</label><input type="email" value="john.doe@company.com" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Phone Number</label><input type="tel" value="+1 (555) 123-4567" class="glass-input"></div>
+                      </div>
+
+                      <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white/80">Bio</label>
+                        <textarea rows="3" class="w-full rounded-xl px-4 py-3 bg-white/[0.04] border border-white/[0.1] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none transition-all">Senior Product Designer with 8+ years of experience in creating user-centered digital experiences.</textarea>
+                      </div>
+
+                      <div class="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                        <h3 class="text-base font-semibold text-white mb-4">Social Links</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white/80">Website</label>
+                            <div class="relative">
+                              <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                              <input type="url" value="https://johndoe.design" class="glass-input pl-10">
+                            </div>
+                          </div>
+                          <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white/80">Twitter</label>
+                            <div class="relative">
+                              <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                              <input type="text" value="@johndoe" class="glass-input pl-10">
+                            </div>
+                          </div>
+                          <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white/80">LinkedIn</label>
+                            <div class="relative">
+                              <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
+                              <input type="text" value="johndoe" class="glass-input pl-10">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Password Tab -->
+                  <div id="tab-password" class="tab-content">
+                    <div class="space-y-6">
+                      <div class="p-5 rounded-2xl bg-primary/[0.08] border border-primary/20">
+                        <div class="flex gap-3">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                          <div>
+                            <h3 class="text-sm font-medium text-white">Password Requirements</h3>
+                            <ul class="mt-2 space-y-1 text-xs text-white/60">
+                              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-primary"></span>Minimum 8 characters long</li>
+                              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-primary"></span>At least one uppercase letter</li>
+                              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-primary"></span>At least one number</li>
+                              <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-primary"></span>At least one special character</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="space-y-5">
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Current Password</label><input type="password" placeholder="Enter your current password" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">New Password</label><input type="password" id="newPassword" placeholder="Enter your new password" class="glass-input" oninput="updatePasswordStrength()"></div>
+                        <div class="flex flex-col gap-2">
+                          <label class="text-sm font-medium text-white/80">Confirm New Password</label>
+                          <input type="password" id="confirmPassword" placeholder="Confirm your new password" class="glass-input" oninput="checkPasswordMatch()">
+                          <p id="passwordMatchError" class="text-sm text-red-400 hidden">Passwords do not match</p>
+                        </div>
+                      </div>
+
+                      <div id="passwordStrength" class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.04] hidden">
+                        <div class="flex items-center justify-between mb-2">
+                          <span class="text-sm text-white/70">Password Strength</span>
+                          <span id="strengthBadge" class="glass-badge glass-badge-danger">Weak</span>
+                        </div>
+                        <div class="h-2 rounded-full bg-white/[0.06] overflow-hidden">
+                          <div id="strengthBar" class="h-full rounded-full bg-red-500 w-1/3 transition-all duration-300"></div>
+                        </div>
+                      </div>
+
+                      <div class="flex items-center gap-3 p-4 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                        <div class="p-2 rounded-lg bg-white/[0.04]">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div>
+                          <p class="text-sm text-white">Last password change</p>
+                          <p class="text-xs text-white/50">January 15, 2024 at 2:30 PM</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Address Tab -->
+                  <div id="tab-address" class="tab-content">
+                    <div class="space-y-6">
+                      <div class="relative h-40 rounded-2xl overflow-hidden bg-white/[0.02] border border-white/[0.06]">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                          <div class="text-center">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto text-white/30 mb-2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <p class="text-sm text-white/50">Map preview</p>
+                          </div>
+                        </div>
+                        <div class="absolute bottom-3 right-3">
+                          <button class="glass-btn glass-btn-secondary glass-btn-sm">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mr-1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                            Expand
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div class="sm:col-span-2 flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Street Address</label><input type="text" value="123 Innovation Drive" placeholder="123 Main Street" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">Apartment, Suite, etc.</label><input type="text" value="Suite 456" placeholder="Apt 4B" class="glass-input"></div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">City</label><input type="text" value="San Francisco" class="glass-input"></div>
+                        <div class="flex flex-col gap-2">
+                          <label class="text-sm font-medium text-white/80">State / Province</label>
+                          <select class="glass-input cursor-pointer">
+                            <option value="California" class="bg-[#0a0a12]" selected>California</option>
+                            <option value="New York" class="bg-[#0a0a12]">New York</option>
+                            <option value="Texas" class="bg-[#0a0a12]">Texas</option>
+                            <option value="Florida" class="bg-[#0a0a12]">Florida</option>
+                            <option value="Washington" class="bg-[#0a0a12]">Washington</option>
+                          </select>
+                        </div>
+                        <div class="flex flex-col gap-2"><label class="text-sm font-medium text-white/80">ZIP / Postal Code</label><input type="text" value="94102" class="glass-input"></div>
+                        <div class="flex flex-col gap-2">
+                          <label class="text-sm font-medium text-white/80">Country</label>
+                          <select class="glass-input cursor-pointer">
+                            <option value="United States" class="bg-[#0a0a12]" selected>United States</option>
+                            <option value="Canada" class="bg-[#0a0a12]">Canada</option>
+                            <option value="United Kingdom" class="bg-[#0a0a12]">United Kingdom</option>
+                            <option value="Germany" class="bg-[#0a0a12]">Germany</option>
+                            <option value="France" class="bg-[#0a0a12]">France</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                        <h3 class="text-base font-semibold text-white mb-4">Saved Addresses</h3>
+                        <div class="space-y-3">
+                          <div class="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-primary/30 cursor-pointer">
+                            <div class="p-2 rounded-lg bg-primary/20">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            </div>
+                            <div class="flex-1">
+                              <div class="flex items-center gap-2">
+                                <p class="text-sm font-medium text-white">Home</p>
+                                <span class="glass-badge glass-badge-primary">Default</span>
+                              </div>
+                              <p class="text-xs text-white/50 mt-0.5">123 Innovation Drive, Suite 456, San Francisco, CA 94102</p>
+                            </div>
+                            <button class="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/[0.06] transition-colors">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                            </button>
+                          </div>
+                          <div class="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] cursor-pointer hover:border-white/[0.1] transition-colors">
+                            <div class="p-2 rounded-lg bg-white/[0.04]">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                            <div class="flex-1">
+                              <p class="text-sm font-medium text-white">Work</p>
+                              <p class="text-xs text-white/50 mt-0.5">456 Market Street, Floor 12, San Francisco, CA 94103</p>
+                            </div>
+                            <button class="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/[0.06] transition-colors">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                            </button>
+                          </div>
+                        </div>
+                        <button class="mt-4 w-full flex items-center justify-center gap-2 p-3 rounded-xl border-2 border-dashed border-white/[0.1] text-white/50 hover:border-primary/50 hover:text-primary transition-colors">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                          Add New Address
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4 p-5 sm:p-6 border-t border-white/[0.06] bg-white/[0.01]">
+                  <p class="text-xs text-white/40">Last updated: January 20, 2024 at 4:15 PM</p>
+                  <div class="flex gap-3">
+                    <button class="glass-btn glass-btn-secondary">Discard Changes</button>
+                    <button class="glass-btn glass-btn-primary">Save Changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </main>
+      </div>
+
+      <footer class="mt-12 text-center py-6 border-t border-white/[0.06]">
+        <p class="text-sm text-white/40">Built with Glassmorphism Design System</p>
+      </footer>
+    </div>
+  </div>
 
   <script>
-    // Navigation
-    const navItems = document.querySelectorAll('.nav-item');
-    const sections = document.querySelectorAll('.section');
+    const usersData = [
+      { id: "1", name: "Sarah Chen", email: "sarah@company.com", role: "Admin", status: "online", department: "Engineering", joinDate: "Jan 15, 2024", lastActive: "Just now" },
+      { id: "2", name: "Marcus Johnson", email: "marcus@company.com", role: "Editor", status: "online", department: "Marketing", joinDate: "Feb 3, 2024", lastActive: "2 min ago" },
+      { id: "3", name: "Emily Rodriguez", email: "emily@company.com", role: "Viewer", status: "away", department: "Design", joinDate: "Mar 22, 2024", lastActive: "15 min ago" },
+      { id: "4", name: "James Wilson", email: "james@company.com", role: "Editor", status: "busy", department: "Engineering", joinDate: "Apr 8, 2024", lastActive: "1 hour ago" },
+      { id: "5", name: "Aisha Patel", email: "aisha@company.com", role: "Admin", status: "offline", department: "Operations", joinDate: "May 1, 2024", lastActive: "2 days ago" },
+      { id: "6", name: "Lucas Kim", email: "lucas@company.com", role: "Viewer", status: "online", department: "Sales", joinDate: "Jun 15, 2024", lastActive: "5 min ago" },
+      { id: "7", name: "Olivia Brown", email: "olivia@company.com", role: "Editor", status: "away", department: "Design", joinDate: "Jul 20, 2024", lastActive: "30 min ago" },
+      { id: "8", name: "Daniel Lee", email: "daniel@company.com", role: "Viewer", status: "online", department: "Engineering", joinDate: "Aug 5, 2024", lastActive: "Just now" },
+    ];
+    let currentRoleFilter = 'all', currentStatusFilter = 'all', selectedUsers = [];
+    const roleColors = { Admin: 'danger', Editor: 'primary', Viewer: 'default' };
 
-    navItems.forEach(item => {
-      item.addEventListener('click', () => {
-        const sectionId = item.dataset.section;
-        
-        // Update nav items
-        navItems.forEach(nav => nav.classList.remove('active'));
-        item.classList.add('active');
-        
-        // Update sections
-        sections.forEach(section => section.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-      });
-    });
+    document.addEventListener('DOMContentLoaded', () => renderUsers(usersData));
 
-    // Set initial active state
-    navItems[0].classList.add('active');
+    function renderUsers(users) {
+      document.getElementById('usersTableBody').innerHTML = users.map(user => `
+        <tr class="${selectedUsers.includes(user.id) ? 'selected' : ''}">
+          <td><input type="checkbox" class="custom-checkbox" ${selectedUsers.includes(user.id) ? 'checked' : ''} onchange="toggleSelectUser('${user.id}')"></td>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="glass-avatar glass-avatar-md"><div class="glass-avatar-inner">${user.name.split(' ').map(n => n[0]).join('')}</div><span class="glass-avatar-status status-${user.status}"></span></div>
+              <div class="min-w-0"><p class="text-sm font-medium text-white truncate">${user.name}</p><p class="text-xs text-white/50 truncate">${user.email}</p></div>
+            </div>
+          </td>
+          <td class="hidden md:table-cell"><span class="glass-badge glass-badge-${roleColors[user.role]}">${user.role}</span></td>
+          <td class="hidden lg:table-cell"><span class="text-sm text-white/70">${user.department}</span></td>
+          <td class="hidden xl:table-cell"><span class="text-sm text-white/50">${user.joinDate}</span></td>
+          <td class="hidden sm:table-cell"><span class="text-sm text-white/50">${user.lastActive}</span></td>
+          <td>
+            <div class="flex items-center justify-end gap-1">
+              <button class="p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/[0.06] transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
+              <button class="p-2 rounded-lg text-white/50 hover:text-red-400 hover:bg-red-500/10 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+            </div>
+          </td>
+        </tr>`).join('');
+      document.getElementById('userCount').textContent = users.length;
+    }
 
-    // Tabs
-    const tabs = document.querySelectorAll('.tab');
-    const tabContents = document.querySelectorAll('.tab-content');
+    function filterUsers() {
+      const search = document.getElementById('userSearch').value.toLowerCase();
+      const dept = document.getElementById('deptFilter').value;
+      renderUsers(usersData.filter(user => 
+        (user.name.toLowerCase().includes(search) || user.email.toLowerCase().includes(search) || user.department.toLowerCase().includes(search)) &&
+        (currentRoleFilter === 'all' || user.role === currentRoleFilter) &&
+        (currentStatusFilter === 'all' || user.status === currentStatusFilter) &&
+        (dept === 'all' || user.department === dept)
+      ));
+    }
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const tabId = tab.dataset.tab;
-        
-        // Update tabs
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        
-        // Update tab contents
-        tabContents.forEach(content => content.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-      });
-    });
+    function setRoleFilter(btn, role) {
+      document.querySelectorAll('#roleFilters .filter-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      currentRoleFilter = role;
+      filterUsers();
+    }
 
-    // Image Preview
-    function previewImage(event) {
-      const file = event.target.files[0];
+    function setStatusFilter(btn, status) {
+      document.querySelectorAll('#statusFilters .filter-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      currentStatusFilter = status;
+      filterUsers();
+    }
+
+    function toggleSelectAll() {
+      selectedUsers = document.getElementById('selectAll').checked ? usersData.map(u => u.id) : [];
+      updateSelectedCount();
+      filterUsers();
+    }
+
+    function toggleSelectUser(id) {
+      selectedUsers = selectedUsers.includes(id) ? selectedUsers.filter(uid => uid !== id) : [...selectedUsers, id];
+      updateSelectedCount();
+      filterUsers();
+    }
+
+    function updateSelectedCount() {
+      const el = document.getElementById('selectedCount');
+      selectedUsers.length > 0 ? (el.textContent = `${selectedUsers.length} selected`, el.classList.remove('hidden')) : el.classList.add('hidden');
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('sidebarOverlay').classList.toggle('opacity-0');
+      document.getElementById('sidebarOverlay').classList.toggle('pointer-events-none');
+    }
+
+    function switchPage(page, btn) {
+      document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+      document.getElementById('page-' + page)?.classList.remove('hidden');
+      document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+      btn?.classList.add('active');
+      if (window.innerWidth < 1024) toggleSidebar();
+    }
+
+    function switchProfileTab(btn, tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+    }
+
+    function toggleSwitch(el) { el.classList.toggle('active'); }
+
+    function handleImageUpload(input, previewId, containerId) {
+      const file = input.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-          const preview = document.getElementById('upload-preview');
-          const placeholder = document.getElementById('upload-placeholder');
-          const uploadArea = document.getElementById('upload-area');
-          
-          preview.src = e.target.result;
-          preview.classList.add('visible');
-          placeholder.classList.add('hidden');
-          uploadArea.classList.add('has-image');
+        reader.onloadend = () => {
+          document.getElementById(previewId).innerHTML = `<img src="${reader.result}" alt="Preview" class="w-full h-full object-cover"><div class="image-upload-overlay"><button class="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20" onclick="event.stopPropagation(); document.getElementById('${input.id}').click()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30" onclick="event.stopPropagation(); removeImage('${previewId}', '${containerId}', '${input.id}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button></div>`;
+          document.getElementById(containerId).classList.add('has-image');
         };
         reader.readAsDataURL(file);
       }
     }
 
-    // User Search
-    const usersData = [
-      { name: 'John Doe', email: 'john.doe@example.com', role: 'Admin', status: 'active', lastActive: '2 mins ago' },
-      { name: 'Sarah Miller', email: 'sarah.m@example.com', role: 'Editor', status: 'active', lastActive: '15 mins ago' },
-      { name: 'Mike Johnson', email: 'mike.j@example.com', role: 'Viewer', status: 'pending', lastActive: '1 hour ago' },
-      { name: 'Emily Wilson', email: 'emily.w@example.com', role: 'Editor', status: 'inactive', lastActive: '3 days ago' },
-      { name: 'Alex Brown', email: 'alex.b@example.com', role: 'Admin', status: 'active', lastActive: 'Just now' },
-    ];
-
-    function searchUsers() {
-      const query = document.getElementById('user-search').value.toLowerCase();
-      const tbody = document.getElementById('users-table');
-      
-      const filtered = usersData.filter(user => 
-        user.name.toLowerCase().includes(query) ||
-        user.email.toLowerCase().includes(query) ||
-        user.role.toLowerCase().includes(query)
-      );
-
-      tbody.innerHTML = filtered.map(user => `
-        <tr>
-          <td>
-            <div class="user-cell">
-              <div class="avatar">${user.name.split(' ').map(n => n[0]).join('')}</div>
-              <div class="user-info">
-                <span class="user-name">${user.name}</span>
-                <span class="user-email">${user.email}</span>
-              </div>
-            </div>
-          </td>
-          <td>${user.role}</td>
-          <td><span class="status-badge status-${user.status}"><span class="status-dot"></span>${user.status.charAt(0).toUpperCase() + user.status.slice(1)}</span></td>
-          <td>${user.lastActive}</td>
-        </tr>
-      `).join('');
+    function removeImage(previewId, containerId, inputId) {
+      const icons = {
+        logoPreview: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg><span class="text-xs font-medium">Upload Logo</span><span class="text-[10px]">PNG, JPG up to 2MB</span>',
+        faviconPreview: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="m8 12 2 2 4-4"/></svg><span class="text-xs font-medium">Upload Favicon</span><span class="text-[10px]">ICO, PNG 32x32</span>',
+        coverPreview: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/><path d="m18 2 4 4-8 8h-4v-4l8-8z"/></svg><span class="text-xs font-medium">Upload Cover</span><span class="text-[10px]">1200x630 recommended</span>'
+      };
+      document.getElementById(previewId).innerHTML = `<div class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/40 hover:text-primary transition-colors">${icons[previewId]}</div>`;
+      document.getElementById(containerId).classList.remove('has-image');
+      document.getElementById(inputId).value = '';
     }
 
-    // Enable real-time search on input
-    document.getElementById('user-search').addEventListener('input', searchUsers);
+    function handleProfilePhotoUpload(input) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          document.getElementById('profilePhotoPreview').innerHTML = `<img src="${reader.result}" alt="Profile" class="w-full h-full object-cover">`;
+          document.getElementById('removePhotoBtn').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removeProfilePhoto() {
+      document.getElementById('profilePhotoPreview').innerHTML = '<div class="w-full h-full flex items-center justify-center text-3xl font-bold text-white/60">JD</div>';
+      document.getElementById('profilePhotoInput').value = '';
+      document.getElementById('removePhotoBtn').classList.add('hidden');
+    }
+
+    function updatePasswordStrength() {
+      const password = document.getElementById('newPassword').value;
+      const el = document.getElementById('passwordStrength');
+      if (password) {
+        el.classList.remove('hidden');
+        const bar = document.getElementById('strengthBar');
+        const badge = document.getElementById('strengthBadge');
+        if (password.length >= 12) { bar.className = 'h-full rounded-full bg-emerald-500 w-full transition-all duration-300'; badge.className = 'glass-badge glass-badge-success'; badge.textContent = 'Strong'; }
+        else if (password.length >= 8) { bar.className = 'h-full rounded-full bg-amber-500 w-2/3 transition-all duration-300'; badge.className = 'glass-badge glass-badge-warning'; badge.textContent = 'Medium'; }
+        else { bar.className = 'h-full rounded-full bg-red-500 w-1/3 transition-all duration-300'; badge.className = 'glass-badge glass-badge-danger'; badge.textContent = 'Weak'; }
+      } else el.classList.add('hidden');
+      checkPasswordMatch();
+    }
+
+    function checkPasswordMatch() {
+      const error = document.getElementById('passwordMatchError');
+      const confirm = document.getElementById('confirmPassword').value;
+      confirm && confirm !== document.getElementById('newPassword').value ? error.classList.remove('hidden') : error.classList.add('hidden');
+    }
   </script>
 </body>
 </html>

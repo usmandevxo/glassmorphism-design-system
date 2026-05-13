@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glassmorphism Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0a0f;
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-hover: rgba(255, 255, 255, 0.08);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.6);
+      --text-muted: rgba(255, 255, 255, 0.4);
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.4);
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #ef4444;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 260px;
+      height: 100vh;
+      background: var(--glass-bg);
+      border-right: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      padding: 1.5rem;
+      z-index: 100;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      border-radius: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 0.25rem;
+    }
+
+    .nav-item:hover {
+      background: var(--glass-hover);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Glass Card */
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      backdrop-filter: blur(20px);
+      padding: 1.5rem;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .card-description {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .form-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 1rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 0.9375rem;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Search Bar */
+    .search-container {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .search-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 1rem 0 2.75rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 0.9375rem;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0 1.25rem;
+      height: 44px;
+      border-radius: 12px;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5558e3;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .btn-ghost {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+    }
+
+    .btn-ghost:hover {
+      background: var(--glass-hover);
+    }
+
+    /* Table */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    th {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    td {
+      font-size: 0.9375rem;
+    }
+
+    tr:hover td {
+      background: var(--glass-hover);
+    }
+
+    .user-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-weight: 500;
+    }
+
+    .user-email {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .status-active {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--success);
+    }
+
+    .status-inactive {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--error);
+    }
+
+    .status-pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      background: var(--glass-bg);
+      padding: 0.25rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+      text-align: center;
+    }
+
+    .tab:hover {
+      color: var(--text-primary);
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Image Upload */
+    .image-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 2rem;
+      border: 2px dashed var(--glass-border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .image-upload:hover {
+      border-color: var(--primary);
+      background: var(--glass-hover);
+    }
+
+    .image-upload.has-image {
+      border-style: solid;
+    }
+
+    .upload-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .upload-preview.visible {
+      display: block;
+    }
+
+    .upload-placeholder {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+
+    .upload-placeholder.hidden {
+      display: none;
+    }
+
+    .upload-text {
+      text-align: center;
+    }
+
+    .upload-text-main {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .upload-text-sub {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    #file-input {
+      display: none;
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .page-description {
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+
+    /* Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    /* Sections */
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* Form Actions */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .search-container {
+        flex-direction: column;
+      }
+
+      .tabs {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+          <polyline points="2 17 12 22 22 17"/>
+          <polyline points="2 12 12 17 22 12"/>
+        </svg>
+      </div>
+      <span class="logo-text">GlassUI</span>
+    </div>
+
+    <nav>
+      <div class="nav-item" data-section="users">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>Users</span>
+      </div>
+      <div class="nav-item" data-section="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span>Settings</span>
+      </div>
+      <div class="nav-item" data-section="profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Profile</span>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Users Section -->
+    <section id="users" class="section active">
+      <div class="page-header">
+        <h1 class="page-title">Users</h1>
+        <p class="page-description">Manage and search your user database</p>
+      </div>
+
+      <div class="glass-card">
+        <div class="search-container">
+          <div class="search-wrapper">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input type="text" id="user-search" class="search-input" placeholder="Search by name, email, or role...">
+          </div>
+          <button class="btn btn-primary" onclick="searchUsers()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+            Search
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Last Active</th>
+              </tr>
+            </thead>
+            <tbody id="users-table">
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar">JD</div>
+                    <div class="user-info">
+                      <span class="user-name">John Doe</span>
+                      <span class="user-email">john.doe@example.com</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Admin</td>
+                <td><span class="status-badge status-active"><span class="status-dot"></span>Active</span></td>
+                <td>2 mins ago</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar">SM</div>
+                    <div class="user-info">
+                      <span class="user-name">Sarah Miller</span>
+                      <span class="user-email">sarah.m@example.com</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Editor</td>
+                <td><span class="status-badge status-active"><span class="status-dot"></span>Active</span></td>
+                <td>15 mins ago</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar">MJ</div>
+                    <div class="user-info">
+                      <span class="user-name">Mike Johnson</span>
+                      <span class="user-email">mike.j@example.com</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Viewer</td>
+                <td><span class="status-badge status-pending"><span class="status-dot"></span>Pending</span></td>
+                <td>1 hour ago</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar">EW</div>
+                    <div class="user-info">
+                      <span class="user-name">Emily Wilson</span>
+                      <span class="user-email">emily.w@example.com</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Editor</td>
+                <td><span class="status-badge status-inactive"><span class="status-dot"></span>Inactive</span></td>
+                <td>3 days ago</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar">AB</div>
+                    <div class="user-info">
+                      <span class="user-name">Alex Brown</span>
+                      <span class="user-email">alex.b@example.com</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Admin</td>
+                <td><span class="status-badge status-active"><span class="status-dot"></span>Active</span></td>
+                <td>Just now</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section id="settings" class="section">
+      <div class="page-header">
+        <h1 class="page-title">Settings</h1>
+        <p class="page-description">Manage your account settings and preferences</p>
+      </div>
+
+      <div class="glass-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Profile Picture</h2>
+            <p class="card-description">Upload a new profile picture</p>
+          </div>
+        </div>
+
+        <div class="image-upload" id="upload-area" onclick="document.getElementById('file-input').click()">
+          <input type="file" id="file-input" accept="image/*" onchange="previewImage(event)">
+          <div class="upload-placeholder" id="upload-placeholder">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <img id="upload-preview" class="upload-preview" src="" alt="Preview">
+          <div class="upload-text">
+            <p class="upload-text-main">Click to upload or drag and drop</p>
+            <p class="upload-text-sub">PNG, JPG or GIF (max. 2MB)</p>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-ghost">Cancel</button>
+          <button class="btn btn-primary">Save Changes</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile" class="section">
+      <div class="page-header">
+        <h1 class="page-title">Profile</h1>
+        <p class="page-description">Manage your personal information</p>
+      </div>
+
+      <div class="glass-card">
+        <div class="tabs">
+          <button class="tab active" data-tab="information">Information</button>
+          <button class="tab" data-tab="password">Password</button>
+          <button class="tab" data-tab="address">Address</button>
+        </div>
+
+        <!-- Information Tab -->
+        <div id="information" class="tab-content active">
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input type="text" class="form-input" placeholder="John" value="John">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input type="text" class="form-input" placeholder="Doe" value="Doe">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" placeholder="john@example.com" value="john.doe@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" class="form-input" placeholder="+1 (555) 000-0000" value="+1 (555) 123-4567">
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-ghost">Cancel</button>
+            <button class="btn btn-primary">Save Changes</button>
+          </div>
+        </div>
+
+        <!-- Password Tab -->
+        <div id="password" class="tab-content">
+          <div class="form-group">
+            <label class="form-label">Current Password</label>
+            <input type="password" class="form-input" placeholder="Enter current password">
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-input" placeholder="Enter new password">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm New Password</label>
+            <input type="password" class="form-input" placeholder="Confirm new password">
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-ghost">Cancel</button>
+            <button class="btn btn-primary">Update Password</button>
+          </div>
+        </div>
+
+        <!-- Address Tab -->
+        <div id="address" class="tab-content">
+          <div class="form-group">
+            <label class="form-label">Street Address</label>
+            <input type="text" class="form-input" placeholder="123 Main Street" value="123 Innovation Drive">
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">City</label>
+              <input type="text" class="form-input" placeholder="City" value="San Francisco">
+            </div>
+            <div class="form-group">
+              <label class="form-label">State / Province</label>
+              <input type="text" class="form-input" placeholder="State" value="California">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">ZIP / Postal Code</label>
+              <input type="text" class="form-input" placeholder="12345" value="94102">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Country</label>
+              <input type="text" class="form-input" placeholder="Country" value="United States">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-ghost">Cancel</button>
+            <button class="btn btn-primary">Save Address</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.section');
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const sectionId = item.dataset.section;
+        
+        // Update nav items
+        navItems.forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+        
+        // Update sections
+        sections.forEach(section => section.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+      });
+    });
+
+    // Set initial active state
+    navItems[0].classList.add('active');
+
+    // Tabs
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabId = tab.dataset.tab;
+        
+        // Update tabs
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Update tab contents
+        tabContents.forEach(content => content.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // Image Preview
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('upload-preview');
+          const placeholder = document.getElementById('upload-placeholder');
+          const uploadArea = document.getElementById('upload-area');
+          
+          preview.src = e.target.result;
+          preview.classList.add('visible');
+          placeholder.classList.add('hidden');
+          uploadArea.classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // User Search
+    const usersData = [
+      { name: 'John Doe', email: 'john.doe@example.com', role: 'Admin', status: 'active', lastActive: '2 mins ago' },
+      { name: 'Sarah Miller', email: 'sarah.m@example.com', role: 'Editor', status: 'active', lastActive: '15 mins ago' },
+      { name: 'Mike Johnson', email: 'mike.j@example.com', role: 'Viewer', status: 'pending', lastActive: '1 hour ago' },
+      { name: 'Emily Wilson', email: 'emily.w@example.com', role: 'Editor', status: 'inactive', lastActive: '3 days ago' },
+      { name: 'Alex Brown', email: 'alex.b@example.com', role: 'Admin', status: 'active', lastActive: 'Just now' },
+    ];
+
+    function searchUsers() {
+      const query = document.getElementById('user-search').value.toLowerCase();
+      const tbody = document.getElementById('users-table');
+      
+      const filtered = usersData.filter(user => 
+        user.name.toLowerCase().includes(query) ||
+        user.email.toLowerCase().includes(query) ||
+        user.role.toLowerCase().includes(query)
+      );
+
+      tbody.innerHTML = filtered.map(user => `
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="avatar">${user.name.split(' ').map(n => n[0]).join('')}</div>
+              <div class="user-info">
+                <span class="user-name">${user.name}</span>
+                <span class="user-email">${user.email}</span>
+              </div>
+            </div>
+          </td>
+          <td>${user.role}</td>
+          <td><span class="status-badge status-${user.status}"><span class="status-dot"></span>${user.status.charAt(0).toUpperCase() + user.status.slice(1)}</span></td>
+          <td>${user.lastActive}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Enable real-time search on input
+    document.getElementById('user-search').addEventListener('input', searchUsers);
+  </script>
+</body>
+</html>

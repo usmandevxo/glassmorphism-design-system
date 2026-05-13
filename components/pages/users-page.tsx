@@ -92,7 +92,7 @@ function UsersPage() {
       <GlassCard>
         <div className="flex flex-col gap-4">
           {/* Search Row */}
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <svg 
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" 
@@ -109,6 +109,13 @@ function UsersPage() {
                 className="w-full h-11 pl-10 pr-4 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/40 transition-all"
               />
             </div>
+            <GlassButton variant="primary" className="gap-2 shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
+              </svg>
+              Search
+            </GlassButton>
           </div>
 
           {/* Filter Pills */}
